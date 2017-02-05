@@ -1,5 +1,5 @@
 
-import CustomEvent from 'custom-event';
+import CustomEvent from './custom-events';
 
 /**
  * dispatch custom events

@@ -6,7 +6,9 @@ import defaults             from './defaults.js';
 
 const slice = Array.prototype.slice;
 
-export function swiper (slider, opts) {
+(function () {
+// 'use strict';
+let swiper = function (slider, opts) {
     let position;
     let slidesWidth;
     let frameWidth;
@@ -537,3 +539,6 @@ export function swiper (slider, opts) {
         destroy
     };
 }
+
+window.swiper = swiper;
+})();
