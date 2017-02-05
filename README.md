@@ -9,31 +9,23 @@ Updated for [Wadi](https://en-sa.wadi.com) with:
 - Autoplay
 - RTL support
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/meandmax.svg)](https://saucelabs.com/u/meandmax)
-
-### Install with node:
+### Installation
 
 ```
-npm install --save lory.js
+bower install basic-swiper --save
 ```
 
 ### Consume it as an ES2015 module:
 
 ```js
-    import {lory} from 'basic-swiper.js';
+    import { swiper } from 'basic-swiper.js';
 
     document.addEventListener('DOMContentLoaded', () => {
         const slider = document.querySelector('.js_slider');
-        lory(slider, {
+        swiper(slider, {
             // options going here
         });
     });
-```
-
-### Installation
-
-```
-bower install basic-swiper --save
 ```
 
 ### Local development
@@ -63,9 +55,9 @@ The default classes can be overridden when instantiating swiper.
         // Prev / Next buttons
         <span class="js_prev prev"></span>
         <span class="js_next next"></span>
-        // Pagination buttons
-        <ul class="js_dots dots"></ul>
     </div>
+    // Pagination buttons
+    <ul class="js_dots dots"></ul>
 </div>
 ```
 
@@ -79,15 +71,9 @@ The default classes can be overridden when instantiating swiper.
 .slider {}
 
 .frame {
-    /**
-     * (optional) wrapper width, specifies width of the slider frame.
-     */
-    width: 880px;
-
     position: relative;
     font-size: 0;
     line-height: 0;
-    overflow: hidden;
     white-space: nowrap;
 }
 
@@ -98,11 +84,59 @@ The default classes can be overridden when instantiating swiper.
 li {
     position: relative;
     display: inline-block;
+}
+li img {
+    max-width: 100%;
+}
 
-    /**
-     * (optional) if the content inside the slide element has a defined size.
-     */
-    width: 880px;
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    margin-top: -25px;
+    display: block;
+    cursor: pointer;
+}
+
+.next {
+    right: 0;
+}
+
+.prev {
+    left: 0;
+}
+
+.next svg, .prev svg {
+    width: 25px;
+}
+
+.dots {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+}
+
+.dots > li {
+    width: 7px;
+    height: 7px;
+    border: 1px solid #fff;
+    opacity: 0.5;
+    vertical-align: middle;
+    margin: 0 5px;
+    display: inline-block;
+    border-radius: 100%;
+    background-color: #000;
+    cursor: pointer;
+}
+
+.dots > li.active {
+    background-color: #fff;
+    border: 1px solid #999;
+    box-sizing: border-box;
+    width: 12px;
+    border-radius: 4px;
+    opacity: 1;
 }
 ```
 
@@ -112,7 +146,7 @@ li {
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var slider = document.querySelector('.js_slider');
-        lory(slider, {
+        swiper(slider, {
             // options going here
         });
     });
@@ -148,7 +182,7 @@ li {
     </tr>
     <tr>
         <td>destroy</td>
-        <td>destroys the lory instance by removing all lory specific event listeners</td>
+        <td>destroys the swiper instance by removing all swiper specific event listeners</td>
     </tr>
 </table>
 
@@ -221,43 +255,43 @@ li {
 
 <table>
     <tr>
-        <td>before.lory.init</td>
+        <td>before.swiper.init</td>
         <td>fires before initialisation (first in setup function)</td>
     </tr>
     <tr>
-        <td>after.lory.init</td>
+        <td>after.swiper.init</td>
         <td>fires after initialisation (end of setup function)</td>
     </tr>
     <tr>
-        <td>before.lory.slide</td>
+        <td>before.swiper.slide</td>
         <td>fires before slide change | <strong>arguments:</strong> currentSlide, nextSlide</td>
     </tr>
     <tr>
-        <td>after.lory.slide</td>
+        <td>after.swiper.slide</td>
         <td>fires after slide change | <strong>arguments:</strong> currentSlide</td>
     </tr>
     <tr>
-        <td>before.lory.destroy</td>
+        <td>before.swiper.destroy</td>
         <td>fires before the slider instance gets destroyed</td>
     </tr>
     <tr>
-        <td>after.lory.destroy</td>
+        <td>after.swiper.destroy</td>
         <td>fires after the slider instance gets destroyed</td>
     </tr>
     <tr>
-        <td>on.lory.resize</td>
+        <td>on.swiper.resize</td>
         <td>fires on every resize event</td>
     </tr>
     <tr>
-        <td>on.lory.touchstart</td>
+        <td>on.swiper.touchstart</td>
         <td>fires on every slider touchstart event</td>
     </tr>
     <tr>
-        <td>on.lory.touchmove</td>
+        <td>on.swiper.touchmove</td>
         <td>fires on every slider touchmove event</td>
     </tr>
     <tr>
-        <td>on.lory.touchend</td>
+        <td>on.swiper.touchend</td>
         <td>fires on every slider touchend event</td>
     </tr>
 </table>
