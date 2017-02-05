@@ -737,11 +737,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 	
-	var NativeCustomEvent = global.CustomEvent;
+	// var NativeCustomEvent = global.CustomEvent;
 	
 	function useNative() {
 	  try {
-	    var p = new NativeCustomEvent('cat', { detail: { foo: 'bar' } });
+	    var p = new global.CustomEvent('cat', { detail: { foo: 'bar' } });
 	    return 'cat' === p.type && 'bar' === p.detail.foo;
 	  } catch (e) {}
 	  return false;
@@ -755,7 +755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @public
 	 */
 	
-	module.exports = useNative() ? NativeCustomEvent :
+	module.exports = useNative() ? global.CustomEvent :
 	
 	// IE >= 9
 	'undefined' !== typeof document && 'function' === typeof document.createEvent ? function CustomEvent(type, params) {

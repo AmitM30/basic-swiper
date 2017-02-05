@@ -1,9 +1,9 @@
 
-var NativeCustomEvent = global.CustomEvent;
+// var NativeCustomEvent = global.CustomEvent;
 
 function useNative () {
   try {
-    var p = new NativeCustomEvent('cat', { detail: { foo: 'bar' } });
+    var p = new global.CustomEvent('cat', { detail: { foo: 'bar' } });
     return  'cat' === p.type && 'bar' === p.detail.foo;
   } catch (e) {
   }
@@ -18,7 +18,7 @@ function useNative () {
  * @public
  */
 
-module.exports = useNative() ? NativeCustomEvent :
+module.exports = useNative() ? global.CustomEvent :
 
 // IE >= 9
 'undefined' !== typeof document && 'function' === typeof document.createEvent ? function CustomEvent (type, params) {
