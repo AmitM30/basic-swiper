@@ -1,11 +1,10 @@
 
 ## Swiper
 [![license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/meandmax/lory/master/LICENSE)
+
 Touch enabled minimalistic slider written in vanilla JavaScript.
 
-Forked from: [http://meandmax.github.io/lory/](http://meandmax.github.io/lory/ "lory")
-
-Updated for [Wadi](https://en-sa.wadi.com) with:
+Forked from: [http://meandmax.github.io/lory/](http://meandmax.github.io/lory/ "lory"), Updated for [Wadi](https://en-sa.wadi.com) with:
 - Autoplay
 - RTL support
 
@@ -15,7 +14,7 @@ Updated for [Wadi](https://en-sa.wadi.com) with:
 bower install basic-swiper --save
 ```
 
-### Consume it as an ES2015 module:
+### Using:
 
 ```js
     import { swiper } from 'basic-swiper.js';
@@ -28,7 +27,7 @@ bower install basic-swiper --save
     });
 ```
 
-### Local development
+### Development
 
 To install dev dependencies run:
 ```
@@ -153,39 +152,6 @@ li img {
 </script>
 ```
 
-### API
-
-<table>
-    <tr>
-        <td>prev</td>
-        <td>slides to the previous slide</td>
-    </tr>
-    <tr>
-        <td>next</td>
-        <td>slides to the next slide</td>
-    </tr>
-    <tr>
-        <td>slideTo</td>
-        <td>slides to the index given as an argument: (arguments: index {number})</td>
-    </tr>
-    <tr>
-        <td>returnIndex</td>
-        <td>returns the index of the current slide element</td>
-    </tr>
-    <tr>
-        <td>setup</td>
-        <td>Binds eventlisteners, merging default and user options, setup the slides based on DOM (called once during initialisation). Call setup if DOM or user options have changed or eventlisteners needs to be rebinded.</td>
-    </tr>
-    <tr>
-        <td>reset</td>
-        <td>sets the slider back to the starting position and resets the current index (called on Resize event)</td>
-    </tr>
-    <tr>
-        <td>destroy</td>
-        <td>destroys the swiper instance by removing all swiper specific event listeners</td>
-    </tr>
-</table>
-
 ## Options
 
 <table>
@@ -304,6 +270,6 @@ li img {
 * Opera
 * Internet Explorer 10+
 
-* Internet Explorer 9 (graceful, without transitions + classlistp)
-    - graceful, without transitions
-    - you need to polyfill classlist (https://github.com/eligrey/classList.js/)
+* Internet Explorer 9
+    - graceful, no transitions
+    - need to polyfill classlist (https://github.com/eligrey/classList.js/)
