@@ -197,6 +197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    style[prefixes.transform] = 'translate(' + to + 'px, 0)';
 	                }
 	            }
+	            dispatchSliderEvent('while', 'sliding');
 	        }
 	
 	        /**
@@ -825,6 +826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var dot_count = slider.querySelectorAll('.' + options.classNameSlide).length;
 	    var dot_container = slider.querySelector('.' + options.classNameDotsContainer);
 	    var dot_list_item = document.createElement('li');
+	    dot_list_item.className = 'swiper-pagination-bullet';
 	
 	    function handleDotEvent(e) {
 	        if (e.type === 'before.swiper.init') {}
@@ -987,7 +989,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * enables mouse events for swiping on desktop devices
 	   * @enableMouseEvents {boolean}
 	   */
-	  enableMouseEvents: false,
+	  enableMouseEvents: true,
 	
 	  /**
 	   * window instance

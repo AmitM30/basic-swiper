@@ -112,6 +112,7 @@ let swiper = function (slider, opts) {
                 style[prefixes.transform] = 'translate(' + to + 'px, 0)';
             }
         }
+        dispatchSliderEvent('while', 'sliding');
     }
 
     /**

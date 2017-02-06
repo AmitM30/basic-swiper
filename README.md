@@ -148,7 +148,7 @@ li img {
     </tr>
     <tr>
         <td>enableMouseEvents</td>
-        <td>default: false</td>
+        <td>default: true</td>
     </tr>
     <tr>
         <td>rewind</td>
@@ -210,6 +210,10 @@ li img {
     <tr>
         <td>before.swiper.slide</td>
         <td>fires before slide change | <strong>arguments:</strong> currentSlide, nextSlide</td>
+    </tr>
+    <tr>
+        <td>while.swiper.sliding</td>
+        <td>fires while swiper is transiting between slides</td>
     </tr>
     <tr>
         <td>after.swiper.slide</td>
