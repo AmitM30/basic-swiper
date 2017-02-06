@@ -42,9 +42,9 @@ npm run build
 ### Markup
 The default classes can be overridden when instantiating swiper.
 ```html
-<div class="slider js_slider">
-    <div class="frame js_frame">
-        <ul class="slides js_slides">
+<div class="js_slider">
+    <div class="js_frame">
+        <ul class="js_slides">
             <li class="js_slide">1</li>
             <li class="js_slide">2</li>
             <li class="js_slide">3</li>
@@ -57,7 +57,7 @@ The default classes can be overridden when instantiating swiper.
         <span class="js_next next"></span>
     </div>
     // Pagination
-    <ul class="js_dots dots"></ul>
+    <ul class="js_dots"></ul>
 </div>
 ```
 
@@ -179,12 +179,20 @@ li img {
         <td>default: 'js_slides'</td>
     </tr>
     <tr>
+        <td>classNameDotsContainer</td>
+        <td>default: 'js_dots'</td>
+    </tr>
+    <tr>
         <td>classNamePrevCtrl</td>
         <td>default: 'js_prev'</td>
     </tr>
     <tr>
-        <td>classNameNextCtrl</td>
-        <td>default: 'js_next'</td>
+        <td>autoplay</td>
+        <td>default: false</td>
+    </tr>
+    <tr>
+        <td>direction</td>
+        <td>default: 'ltr'</td>
     </tr>
 </table>
 

@@ -6,7 +6,7 @@
  * @param  {element} options     slider options
  */
 export default function initAutoplay (slide, options) {
-    let autoplayTime = (typeof options.autoplay === 'number') ? options.autoplay : 2500;
+    let autoplayTime = (typeof options.autoplay === 'number') ? options.autoplay : 3000;
     let onAutoplayStart = window.setInterval(() => {
         slide(false, true);
     }, autoplayTime);
