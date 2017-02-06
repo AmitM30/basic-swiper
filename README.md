@@ -6,7 +6,8 @@ Touch enabled minimalistic slider written in vanilla JavaScript.
 
 Forked from: [http://meandmax.github.io/lory/](http://meandmax.github.io/lory/ "lory"), Updated for [Wadi](https://en-sa.wadi.com) with:
 - Autoplay
-- RTL support
+- RTL
+- Lazyload images support
 
 ### Installation
 
@@ -55,7 +56,7 @@ The default classes can be overridden when instantiating swiper.
         <span class="js_prev prev"></span>
         <span class="js_next next"></span>
     </div>
-    // Pagination buttons
+    // Pagination
     <ul class="js_dots dots"></ul>
 </div>
 ```
@@ -63,10 +64,6 @@ The default classes can be overridden when instantiating swiper.
 ### CSS
 
 ```css
-/**
- * (optional) define here the style definitions which should be applied on the slider container
- * e.g. width including further controls like arrows etc.
- */
 .slider {}
 
 .frame {
@@ -121,7 +118,6 @@ li img {
     height: 7px;
     border: 1px solid #fff;
     opacity: 0.5;
-    vertical-align: middle;
     margin: 0 5px;
     display: inline-block;
     border-radius: 100%;
@@ -139,80 +135,55 @@ li img {
 }
 ```
 
-### Integration
-
-```javascript
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var slider = document.querySelector('.js_slider');
-        swiper(slider, {
-            // options going here
-        });
-    });
-</script>
-```
-
 ## Options
 
 <table>
     <tr>
         <td>slidesToScroll</td>
-        <td>slides scrolled at once</td>
         <td>default: 1</td>
     </tr>
     <tr>
         <td>infinite</td>
-        <td>like carousel, works with multiple slides. (do not combine with rewind)</td>
         <td>default: false (number of visible slides)</td>
     </tr>
     <tr>
         <td>enableMouseEvents</td>
-        <td>enabled mouse events</td>
         <td>default: false</td>
     </tr>
     <tr>
         <td>rewind</td>
-        <td>if slider reached the last slide, with next click the slider goes back to the startindex. (do not combine with infinite)</td>
         <td>default: false</td>
     </tr>
     <tr>
-        <td>slideSpeed</td>
-        <td>time in milliseconds for the animation of a valid slide attempt</td>
+        <td>slideSpeed (ms)</td>
         <td>default: 300</td>
     </tr>
     <tr>
-        <td>rewindSpeed</td>
-        <td>time in milliseconds for the animation of the rewind after the last slide</td>
+        <td>rewindSpeed (ms)</td>
         <td>default: 600</td>
     </tr>
     <tr>
-        <td>snapBackSpeed</td>
-        <td>time for the snapBack of the slider if the slide attempt was not valid</td>
+        <td>snapBackSpeed (ms)</td>
         <td>default: 200</td>
     </tr>
     <tr>
-        <td>ease</td>
-        <td>cubic bezier easing functions: http://easings.net/de</td>
+        <td>ease (cubic bezier easing functions: http://easings.net/de)</td>
         <td>default: 'ease'</td>
     </tr>
     <tr>
         <td>classNameFrame</td>
-        <td>class name for slider frame</td>
         <td>default: 'js_frame'</td>
     </tr>
     <tr>
         <td>classNameSlideContainer</td>
-        <td>class name for slides container</td>
         <td>default: 'js_slides'</td>
     </tr>
     <tr>
         <td>classNamePrevCtrl</td>
-        <td>class name for slider previous control</td>
         <td>default: 'js_prev'</td>
     </tr>
     <tr>
         <td>classNameNextCtrl</td>
-        <td>class name for slider next control</td>
         <td>default: 'js_next'</td>
     </tr>
 </table>

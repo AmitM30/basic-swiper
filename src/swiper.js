@@ -136,6 +136,8 @@ let swiper = function (slider, opts) {
 
         let duration = slideSpeed;
 
+        slider.style.direction = slider.style.direction || options.direction;
+
         const nextSlide = direction ? index + 1 : index - 1;
         const maxOffset = Math.round(slidesWidth - frameWidth);
 
@@ -158,7 +160,9 @@ let swiper = function (slider, opts) {
             nextIndex += infinite;
         }
 
-        let nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * -1, maxOffset * -1), 0);
+        // let nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * -1, maxOffset * -1), 0);
+        let nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * (options.direction === 'ltr' ? -1 : 1), maxOffset * -1), 0);
+        nextOffset = nextOffset * (options.direction === 'ltr' ? 1 : -1);
 
         if (rewind && Math.abs(position.x) === maxOffset && direction) {
             nextOffset = 0;
@@ -250,14 +254,14 @@ let swiper = function (slider, opts) {
             slides = slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide));
         }
 
-        if (options.autoplay) {
-            onAutoplayStart = initAutoplay(slide, options)
-        }
-
         reset();
 
         if (classNameActiveSlide) {
             setActiveElement(slides, index);
+        }
+
+        if (options.autoplay) {
+            onAutoplayStart = initAutoplay(slide, options)
         }
 
         if (prevCtrl && nextCtrl) {
@@ -282,7 +286,7 @@ let swiper = function (slider, opts) {
      * reset function: called on resize
      */
     function reset () {
-        var {infinite, ease, rewindSpeed, rewindOnResize, classNameActiveSlide} = options;
+        var { infinite, ease, rewindSpeed, rewindOnResize, classNameActiveSlide } = options;
 
         slidesWidth = slideContainer.getBoundingClientRect().width || slideContainer.offsetWidth;
         frameWidth = frame.getBoundingClientRect().width || frame.offsetWidth;
@@ -305,13 +309,13 @@ let swiper = function (slider, opts) {
         }
 
         if (infinite) {
-            translate(slides[index + infinite].offsetLeft * -1, 0, null);
+            translate(slides[index + infinite].offsetLeft * (options.direction === 'ltr' ? -1 : 1), 0, null);
 
             index = index + infinite;
-            position.x = slides[index].offsetLeft * -1;
+            position.x = slides[index].offsetLeft * (options.direction === 'ltr' ? -1 : 1);
         } else {
-            translate(slides[index].offsetLeft * -1, rewindSpeed, ease);
-            position.x = slides[index].offsetLeft * -1;
+            // position.x = slides[index].offsetLeft * (options.direction === 'ltr' ? -1 : 1);
+            position.x = 0;
         }
 
         if (classNameActiveSlide) {
@@ -340,7 +344,7 @@ let swiper = function (slider, opts) {
      * prev function: called on clickhandler
      */
     function prev () {
-        slide(false, false);
+        slide(false, (options.direction === 'ltr') ? false : true);
     }
 
     /**
@@ -348,7 +352,7 @@ let swiper = function (slider, opts) {
      * next function: called on clickhandler
      */
     function next () {
-        slide(false, true);
+        slide(false, (options.direction === 'ltr') ? true : false);
     }
 
     /**
@@ -493,10 +497,10 @@ let swiper = function (slider, opts) {
          *
          * @isOutOfBounds {Boolean}
          */
-        const isOutOfBounds = !index && delta.x > 0 ||
-            index === slides.length - 1 && delta.x < 0;
+        const isOutOfBounds = !index && ((options.direction === 'ltr') ? delta.x > 0 : delta.x <= 0) ||
+            index === slides.length - 1 && ((options.direction === 'ltr') ? delta.x < 0 : delta.x >= 0);
 
-        const direction = delta.x < 0;
+        const direction = (options.direction === 'ltr') ? delta.x < 0 : delta.x >= 0;
 
         if (!isScrolling) {
             if (isValid && !isOutOfBounds) {

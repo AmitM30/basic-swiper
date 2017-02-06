@@ -110,5 +110,11 @@ export default {
      * time in ms
      * @autoplay {number}
      */
-    autoplay: false
+    autoplay: false,
+
+    /**
+     * document direction
+     * @autoplay {string}
+     */
+    direction: 'ltr'
 };

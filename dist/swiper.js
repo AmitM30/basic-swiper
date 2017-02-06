@@ -221,6 +221,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var duration = slideSpeed;
 	
+	            slider.style.direction = slider.style.direction || options.direction;
+	
 	            var nextSlide = direction ? index + 1 : index - 1;
 	            var maxOffset = Math.round(slidesWidth - frameWidth);
 	
@@ -243,7 +245,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                nextIndex += infinite;
 	            }
 	
-	            var nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * -1, maxOffset * -1), 0);
+	            // let nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * -1, maxOffset * -1), 0);
+	            var nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * (options.direction === 'ltr' ? -1 : 1), maxOffset * -1), 0);
+	            nextOffset = nextOffset * (options.direction === 'ltr' ? 1 : -1);
 	
 	            if (rewind && Math.abs(position.x) === maxOffset && direction) {
 	                nextOffset = 0;
@@ -335,15 +339,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                slides = slice.call(slideContainer.getElementsByClassName(_defaults2.default.classNameSlide));
 	            }
 	
-	            console.log('options.autoplay: ', options.autoplay);
-	            if (options.autoplay) {
-	                onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
-	            }
-	
 	            reset();
 	
 	            if (classNameActiveSlide) {
 	                setActiveElement(slides, index);
+	            }
+	
+	            if (options.autoplay) {
+	                onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
 	            }
 	
 	            if (prevCtrl && nextCtrl) {
@@ -397,13 +400,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            if (infinite) {
-	                translate(slides[index + infinite].offsetLeft * -1, 0, null);
+	                translate(slides[index + infinite].offsetLeft * (options.direction === 'ltr' ? -1 : 1), 0, null);
 	
 	                index = index + infinite;
-	                position.x = slides[index].offsetLeft * -1;
+	                position.x = slides[index].offsetLeft * (options.direction === 'ltr' ? -1 : 1);
 	            } else {
-	                translate(slides[index].offsetLeft * -1, rewindSpeed, ease);
-	                position.x = slides[index].offsetLeft * -1;
+	                // position.x = slides[index].offsetLeft * (options.direction === 'ltr' ? -1 : 1);
+	                position.x = 0;
 	            }
 	
 	            if (classNameActiveSlide) {
@@ -432,7 +435,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * prev function: called on clickhandler
 	         */
 	        function prev() {
-	            slide(false, false);
+	            slide(false, options.direction === 'ltr' ? false : true);
 	        }
 	
 	        /**
@@ -440,7 +443,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * next function: called on clickhandler
 	         */
 	        function next() {
-	            slide(false, true);
+	            slide(false, options.direction === 'ltr' ? true : false);
 	        }
 	
 	        /**
@@ -589,9 +592,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	             *
 	             * @isOutOfBounds {Boolean}
 	             */
-	            var isOutOfBounds = !index && delta.x > 0 || index === slides.length - 1 && delta.x < 0;
+	            var isOutOfBounds = !index && (options.direction === 'ltr' ? delta.x > 0 : delta.x <= 0) || index === slides.length - 1 && (options.direction === 'ltr' ? delta.x < 0 : delta.x >= 0);
 	
-	            var direction = delta.x < 0;
+	            var direction = options.direction === 'ltr' ? delta.x < 0 : delta.x >= 0;
 	
 	            if (!isScrolling) {
 	                if (isValid && !isOutOfBounds) {
@@ -874,7 +877,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {element} options     slider options
 	 */
 	function initAutoplay(slide, options) {
-	    // let dot_list_item     = document.createElement('li');
 	    var autoplayTime = typeof options.autoplay === 'number' ? options.autoplay : 2500;
 	    var onAutoplayStart = window.setInterval(function () {
 	        slide(false, true);
@@ -1004,7 +1006,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * time in ms
 	   * @autoplay {number}
 	   */
-	  autoplay: false
+	  autoplay: false,
+	
+	  /**
+	   * document direction
+	   * @autoplay {string}
+	   */
+	  direction: 'ltr'
 	};
 
 /***/ }
