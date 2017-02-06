@@ -8,7 +8,7 @@
 export default function initAutoplay (slide, options) {
     let autoplayTime = (typeof options.autoplay === 'number') ? options.autoplay : 3000;
     let onAutoplayStart = window.setInterval(() => {
-        slide(false, true);
+        slide(false, options.direction === 'ltr' ? true : false);
     }, autoplayTime);
 
     return onAutoplayStart;
