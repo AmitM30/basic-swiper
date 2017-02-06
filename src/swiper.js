@@ -2,6 +2,7 @@
 import detectPrefixes       from './utils/detect-prefixes.js';
 import dispatchEvent        from './utils/dispatch-event.js';
 import initPagination       from './utils/init-pagination.js';
+import initAutoplay         from './utils/init-autoplay.js';
 import defaults             from './defaults.js';
 
 const slice = Array.prototype.slice;
@@ -27,6 +28,7 @@ let swiper = function (slider, opts) {
 
     let index   = 0;
     let options = {};
+    let onAutoplayStart;
 
     /**
      * if object is jQuery convert to native DOM element
@@ -128,7 +130,8 @@ let swiper = function (slider, opts) {
             rewind,
             rewindSpeed,
             ease,
-            classNameActiveSlide
+            classNameActiveSlide,
+            autoplay
         } = options;
 
         let duration = slideSpeed;
@@ -245,6 +248,10 @@ let swiper = function (slider, opts) {
             slides = setupInfinite(slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide)));
         } else {
             slides = slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide));
+        }
+
+        if (options.autoplay) {
+            onAutoplayStart = initAutoplay(slide, options)
         }
 
         reset();
@@ -370,6 +377,10 @@ let swiper = function (slider, opts) {
 
         if (nextCtrl) {
             nextCtrl.removeEventListener('click', next);
+        }
+
+        if (onAutoplayStart) {
+            window.clearInterval(onAutoplayStart);
         }
 
         // remove cloned slides if infinite is set

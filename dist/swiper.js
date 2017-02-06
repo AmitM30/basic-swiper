@@ -77,7 +77,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _initPagination2 = _interopRequireDefault(_initPagination);
 	
-	var _defaults = __webpack_require__(6);
+	var _initAutoplay = __webpack_require__(6);
+	
+	var _initAutoplay2 = _interopRequireDefault(_initAutoplay);
+	
+	var _defaults = __webpack_require__(7);
 	
 	var _defaults2 = _interopRequireDefault(_defaults);
 	
@@ -106,6 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var index = 0;
 	        var options = {};
+	        var onAutoplayStart = void 0;
 	
 	        /**
 	         * if object is jQuery convert to native DOM element
@@ -210,7 +215,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                rewind = _options3.rewind,
 	                rewindSpeed = _options3.rewindSpeed,
 	                ease = _options3.ease,
-	                classNameActiveSlide = _options3.classNameActiveSlide;
+	                classNameActiveSlide = _options3.classNameActiveSlide,
+	                autoplay = _options3.autoplay;
 	
 	
 	            var duration = slideSpeed;
@@ -327,6 +333,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                slides = setupInfinite(slice.call(slideContainer.getElementsByClassName(_defaults2.default.classNameSlide)));
 	            } else {
 	                slides = slice.call(slideContainer.getElementsByClassName(_defaults2.default.classNameSlide));
+	            }
+	
+	            console.log('options.autoplay: ', options.autoplay);
+	            if (options.autoplay) {
+	                onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
 	            }
 	
 	            reset();
@@ -458,6 +469,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            if (nextCtrl) {
 	                nextCtrl.removeEventListener('click', next);
+	            }
+	
+	            if (onAutoplayStart) {
+	                window.clearInterval(onAutoplayStart);
 	            }
 	
 	            // remove cloned slides if infinite is set
@@ -799,7 +814,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * handle pagination buttons for slider
 	 *
-	 * @param  {element} slider     slider element
+	 * @param  {element} slider      slider element
+	 * @param  {element} slideTo     slide to frame function
+	 * @param  {element} options     slider options
 	 */
 	function initPagination(slider, slideTo, options) {
 	    var dot_count = slider.querySelectorAll('.' + options.classNameSlide).length;
@@ -841,6 +858,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = initAutoplay;
+	
+	/**
+	 * handle autoplay
+	 *
+	 * @param  {element} slideTo     slide to frame function
+	 * @param  {element} options     slider options
+	 */
+	function initAutoplay(slide, options) {
+	    // let dot_list_item     = document.createElement('li');
+	    var autoplayTime = typeof options.autoplay === 'number' ? options.autoplay : 2500;
+	    var onAutoplayStart = window.setInterval(function () {
+	        slide(false, true);
+	    }, autoplayTime);
+	
+	    return onAutoplayStart;
+	}
+
+/***/ },
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -953,7 +997,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * If false, slides swiper to the first slide on window resize.
 	   * @rewindOnResize {boolean}
 	   */
-	  rewindOnResize: true
+	  rewindOnResize: true,
+	
+	  /**
+	   * autoplay slides
+	   * time in ms
+	   * @autoplay {number}
+	   */
+	  autoplay: false
 	};
 
 /***/ }

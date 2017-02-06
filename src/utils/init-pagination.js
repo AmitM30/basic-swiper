@@ -2,7 +2,9 @@
 /**
  * handle pagination buttons for slider
  *
- * @param  {element} slider     slider element
+ * @param  {element} slider      slider element
+ * @param  {element} slideTo     slide to frame function
+ * @param  {element} options     slider options
  */
 export default function initPagination (slider, slideTo, options) {
     let dot_count         = slider.querySelectorAll('.' + options.classNameSlide).length;

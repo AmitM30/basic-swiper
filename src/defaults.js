@@ -103,5 +103,12 @@ export default {
      * If false, slides swiper to the first slide on window resize.
      * @rewindOnResize {boolean}
      */
-    rewindOnResize: true
+    rewindOnResize: true,
+
+    /**
+     * autoplay slides
+     * time in ms
+     * @autoplay {number}
+     */
+    autoplay: false
 };
