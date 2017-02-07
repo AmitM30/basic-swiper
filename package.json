@@ -1,7 +1,7 @@
 {
   "name": "basic-swiper",
-  "version": "0.1.0",
-  "description": "Touch enabled minimalistic slider written in vanilla JavaScript.",
+  "version": "0.2.2",
+  "description": "Basic Swiper written in native javascript. Support Touch.",
   "author": {
     "name": "Amit M",
     "email": "mangalamitash@gmail.com"

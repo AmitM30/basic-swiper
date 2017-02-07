@@ -1,8 +1,8 @@
-/* globals it, describe, before, beforeEach, assert, lory, fixture */
+/* globals it, describe, before, beforeEach, assert, swiper, fixture */
 
 'use strict';
 
-describe('lory()', function () {
+describe('swiper()', function () {
     var instance;
     var element;
     var slideMargin = 10;
@@ -59,16 +59,16 @@ describe('lory()', function () {
     });
 
     it('has to be a function', function () {
-        assert.typeOf(lory, 'function');
+        assert.typeOf(swiper, 'function');
     });
 
     it('has to return an object', function () {
-        assert.typeOf(lory(element), 'object');
+        assert.typeOf(swiper(element), 'object');
     });
 
     describe('.setup()', function () {
         beforeEach(function () {
-            instance = lory(element);
+            instance = swiper(element);
         });
 
         it('has to be a function', function () {
@@ -78,7 +78,7 @@ describe('lory()', function () {
 
     describe('.slideTo()', function () {
         beforeEach(function () {
-            instance = lory(element);
+            instance = swiper(element);
         });
 
         it('has to be a function', function () {
@@ -88,7 +88,7 @@ describe('lory()', function () {
 
     describe('.reset()', function () {
         beforeEach(function () {
-            instance = lory(element);
+            instance = swiper(element);
         });
 
         it('has to be a function', function () {
@@ -98,7 +98,7 @@ describe('lory()', function () {
 
     describe('.returnIndex()', function () {
         beforeEach(function () {
-            instance = lory(element);
+            instance = swiper(element);
         });
 
         it('has to be a function', function () {
@@ -117,7 +117,7 @@ describe('lory()', function () {
 
         describe('with infinite', function () {
             beforeEach(function () {
-                instance = lory(element, {
+                instance = swiper(element, {
                     infinite: 1
                 });
             });
@@ -130,7 +130,7 @@ describe('lory()', function () {
 
     describe('.next()', function () {
         beforeEach(function () {
-            instance = lory(element);
+            instance = swiper(element);
         });
 
         it('has to be a function', function () {
@@ -180,7 +180,7 @@ describe('lory()', function () {
 
         describe('with infinite', function () {
             beforeEach(function () {
-                instance = lory(element, {
+                instance = swiper(element, {
                     infinite: 1
                 });
             });
@@ -209,7 +209,7 @@ describe('lory()', function () {
 
     describe('.prev()', function() {
         beforeEach(function () {
-            instance = lory(element);
+            instance = swiper(element);
         });
 
         it('has to be a function', function () {
@@ -280,7 +280,7 @@ describe('lory()', function () {
 
         describe('with infinite', function () {
             beforeEach(function () {
-                instance = lory(element, {
+                instance = swiper(element, {
                     infinite: 1
                 });
             });
@@ -339,7 +339,7 @@ describe('lory()', function () {
 
     describe('.destroy()', function () {
         beforeEach(function () {
-            instance = lory(element);
+            instance = swiper(element);
         });
 
         it('has to be a function', function () {
@@ -355,7 +355,7 @@ describe('lory()', function () {
         };
 
         beforeEach(function () {
-            instance = lory(element, {
+            instance = swiper(element, {
                 window: {
                     addEventListener: function(type, listener) {
                         if (type == 'resize') {
@@ -364,14 +364,14 @@ describe('lory()', function () {
                     }
                 }
             });
-            element.addEventListener('on.lory.resize', onResizeCallback);
+            element.addEventListener('on.swiper.resize', onResizeCallback);
         });
 
         afterEach(function () {
-            element.removeEventListener('on.lory.resize', onResizeCallback);
+            element.removeEventListener('on.swiper.resize', onResizeCallback);
         });
 
-        it('has to dispatch the event on.lory.resize after reset()', function () {
+        it('has to dispatch the event on.swiper.resize after reset()', function () {
             instance.next();
             resizeListener();
             assert.equal(indexAfterResize, 0);

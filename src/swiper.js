@@ -112,7 +112,16 @@ let swiper = function (slider, opts) {
                 style[prefixes.transform] = 'translate(' + to + 'px, 0)';
             }
         }
-        dispatchSliderEvent('while', 'sliding');
+
+        // Fire events while sliding
+        let count = 5;
+        let eventInterval = window.setInterval(() => {
+            dispatchSliderEvent('while', 'sliding');
+            count--;
+            if (count === 0) {
+                window.clearInterval(eventInterval);
+            }
+        }, duration / 5);
     }
 
     /**

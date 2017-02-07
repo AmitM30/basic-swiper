@@ -197,7 +197,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    style[prefixes.transform] = 'translate(' + to + 'px, 0)';
 	                }
 	            }
-	            dispatchSliderEvent('while', 'sliding');
+	
+	            // Fire events while sliding
+	            var count = 5;
+	            var eventInterval = window.setInterval(function () {
+	                dispatchSliderEvent('while', 'sliding');
+	                count--;
+	                if (count === 0) {
+	                    window.clearInterval(eventInterval);
+	                }
+	            }, duration / 5);
 	        }
 	
 	        /**
