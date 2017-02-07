@@ -240,6 +240,10 @@ let swiper = function (slider, opts) {
         nextCtrl = slider.getElementsByClassName(classNameNextCtrl)[0];
         dotsContainer = slider.getElementsByClassName(classNameDotsContainer)[0];
 
+        // set swiper direction
+        options.direction = document.body.style.direction || options.direction;
+
+        // set pagination
         if (dotsContainer) {
             initPagination(slider, slideTo, options);
         }
@@ -261,10 +265,12 @@ let swiper = function (slider, opts) {
             setActiveElement(slides, index);
         }
 
+        // set autoplay
         if (options.autoplay) {
             onAutoplayStart = initAutoplay(slide, options)
         }
 
+        // set prev and next controls
         if (prevCtrl && nextCtrl) {
             prevCtrl.addEventListener('click', prev);
             nextCtrl.addEventListener('click', next);

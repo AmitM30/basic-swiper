@@ -325,6 +325,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            nextCtrl = slider.getElementsByClassName(classNameNextCtrl)[0];
 	            dotsContainer = slider.getElementsByClassName(classNameDotsContainer)[0];
 	
+	            // set swiper direction
+	            options.direction = document.body.style.direction || options.direction;
+	
+	            // set pagination
 	            if (dotsContainer) {
 	                (0, _initPagination2.default)(slider, slideTo, options);
 	            }
@@ -346,10 +350,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                setActiveElement(slides, index);
 	            }
 	
+	            // set autoplay
 	            if (options.autoplay) {
 	                onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
 	            }
 	
+	            // set prev and next controls
 	            if (prevCtrl && nextCtrl) {
 	                prevCtrl.addEventListener('click', prev);
 	                nextCtrl.addEventListener('click', next);
