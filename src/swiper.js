@@ -274,10 +274,8 @@ let swiper = function (slider, opts) {
             setActiveElement(slides, index);
         }
 
-        // set autoplay
-        if (options.autoplay) {
-            onAutoplayStart = initAutoplay(slide, options)
-        }
+        // start autoplay
+        startAutoplay();
 
         // set prev and next controls
         if (prevCtrl && nextCtrl) {
@@ -459,6 +457,8 @@ let swiper = function (slider, opts) {
     }
 
     function onTouchmove (event) {
+        stopAutoplay();
+
         const touches = event.touches ? event.touches[0] : event;
         const {pageX, pageY} = touches;
 
@@ -537,6 +537,8 @@ let swiper = function (slider, opts) {
         frame.removeEventListener('mouseup', onTouchend);
         frame.removeEventListener('mouseleave', onTouchend);
 
+        startAutoplay();
+
         dispatchSliderEvent('on', 'touchend', {
             event
         });
@@ -554,6 +556,19 @@ let swiper = function (slider, opts) {
         dispatchSliderEvent('on', 'resize', {
             event
         });
+    }
+
+    function startAutoplay () {
+        // set autoplay
+        if (options.autoplay) {
+            onAutoplayStart = initAutoplay(slide, options)
+        }
+    }
+
+    function stopAutoplay () {
+        if (onAutoplayStart) {
+            window.clearInterval(onAutoplayStart);
+        }
     }
 
     // trigger initial setup

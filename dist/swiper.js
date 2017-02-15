@@ -359,10 +359,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                setActiveElement(slides, index);
 	            }
 	
-	            // set autoplay
-	            if (options.autoplay) {
-	                onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
-	            }
+	            // start autoplay
+	            startAutoplay();
 	
 	            // set prev and next controls
 	            if (prevCtrl && nextCtrl) {
@@ -554,6 +552,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        function onTouchmove(event) {
+	            stopAutoplay();
+	
 	            var touches = event.touches ? event.touches[0] : event;
 	            var pageX = touches.pageX,
 	                pageY = touches.pageY;
@@ -631,6 +631,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            frame.removeEventListener('mouseup', onTouchend);
 	            frame.removeEventListener('mouseleave', onTouchend);
 	
+	            startAutoplay();
+	
 	            dispatchSliderEvent('on', 'touchend', {
 	                event: event
 	            });
@@ -648,6 +650,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            dispatchSliderEvent('on', 'resize', {
 	                event: event
 	            });
+	        }
+	
+	        function startAutoplay() {
+	            // set autoplay
+	            if (options.autoplay) {
+	                onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
+	            }
+	        }
+	
+	        function stopAutoplay() {
+	            if (onAutoplayStart) {
+	                window.clearInterval(onAutoplayStart);
+	            }
 	        }
 	
 	        // trigger initial setup
