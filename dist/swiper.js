@@ -917,7 +917,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function initAutoplay(slide, options) {
 	    var autoplayTime = typeof options.autoplay === 'number' ? options.autoplay : 3000;
-	    console.log('autoplayTime: ', autoplayTime);
 	    var onAutoplayStart = window.setInterval(function () {
 	        slide(false, true);
 	    }, autoplayTime);
