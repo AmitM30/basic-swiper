@@ -89,599 +89,606 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var slice = Array.prototype.slice;
 	
-	(function () {
-	    // 'use strict';
-	    var swiper = function swiper(slider, opts) {
-	        var position = void 0;
-	        var slidesWidth = void 0;
-	        var frameWidth = void 0;
-	        var slides = void 0;
+	// 'use strict';
+	var swiper = function swiper(slider, opts) {
+	    var position = void 0;
+	    var slidesWidth = void 0;
+	    var frameWidth = void 0;
+	    var slides = void 0;
 	
-	        /**
-	         * slider DOM elements
-	         */
-	        var frame = void 0;
-	        var slideContainer = void 0;
-	        var prevCtrl = void 0;
-	        var nextCtrl = void 0;
-	        var prefixes = void 0;
-	        var transitionEndCallback = void 0;
-	        var dotsContainer = void 0;
+	    /**
+	     * slider DOM elements
+	     */
+	    var frame = void 0;
+	    var slideContainer = void 0;
+	    var prevCtrl = void 0;
+	    var nextCtrl = void 0;
+	    var prefixes = void 0;
+	    var transitionEndCallback = void 0;
+	    var dotsContainer = void 0;
 	
-	        var index = 0;
-	        var options = {};
-	        var onAutoplayStart = void 0;
+	    var index = 0;
+	    var options = {};
+	    var onAutoplayStart = void 0;
 	
-	        /**
-	         * if object is jQuery convert to native DOM element
-	         */
-	        if (typeof jQuery !== 'undefined' && slider instanceof jQuery) {
-	            slider = slider[0];
+	    /**
+	     * if object is jQuery convert to native DOM element
+	     */
+	    if (typeof jQuery !== 'undefined' && slider instanceof jQuery) {
+	        slider = slider[0];
+	    }
+	
+	    /**
+	     * private
+	     * set active class to element which is the current slide
+	     */
+	    function setActiveElement(slides, currentIndex) {
+	        var _options = options,
+	            classNameActiveSlide = _options.classNameActiveSlide;
+	
+	
+	        slides.forEach(function (element, index) {
+	            if (element.classList.contains(classNameActiveSlide)) {
+	                element.classList.remove(classNameActiveSlide);
+	            }
+	        });
+	
+	        slides[currentIndex].classList.add(classNameActiveSlide);
+	
+	        if (prevCtrl) {
+	            currentIndex === 0 ? prevCtrl.classList.add(options.classNameDisabled) : prevCtrl.classList.remove(options.classNameDisabled);
 	        }
 	
-	        /**
-	         * private
-	         * set active class to element which is the current slide
-	         */
-	        function setActiveElement(slides, currentIndex) {
-	            var _options = options,
-	                classNameActiveSlide = _options.classNameActiveSlide;
-	
-	
-	            slides.forEach(function (element, index) {
-	                if (element.classList.contains(classNameActiveSlide)) {
-	                    element.classList.remove(classNameActiveSlide);
-	                }
-	            });
-	
-	            slides[currentIndex].classList.add(classNameActiveSlide);
+	        if (nextCtrl && !options.rewind) {
+	            currentIndex + 1 === slides.length ? nextCtrl.classList.add(options.classNameDisabled) : nextCtrl.classList.remove(options.classNameDisabled);
 	        }
+	    }
 	
-	        /**
-	         * private
-	         * setupInfinite: function to setup if infinite is set
-	         *
-	         * @param  {array} slideArray
-	         * @return {array} array of updated slideContainer elements
-	         */
-	        function setupInfinite(slideArray) {
-	            var _options2 = options,
-	                infinite = _options2.infinite;
-	
-	
-	            var front = slideArray.slice(0, infinite);
-	            var back = slideArray.slice(slideArray.length - infinite, slideArray.length);
-	
-	            front.forEach(function (element) {
-	                var cloned = element.cloneNode(true);
-	
-	                slideContainer.appendChild(cloned);
-	            });
-	
-	            back.reverse().forEach(function (element) {
-	                var cloned = element.cloneNode(true);
-	
-	                slideContainer.insertBefore(cloned, slideContainer.firstChild);
-	            });
-	
-	            slideContainer.addEventListener(prefixes.transitionEnd, onTransitionEnd);
-	
-	            return slice.call(slideContainer.children);
-	        }
-	
-	        /**
-	         * [dispatchSliderEvent description]
-	         * @return {[type]} [description]
-	         */
-	        function dispatchSliderEvent(phase, type, detail) {
-	            (0, _dispatchEvent2.default)(slider, phase + '.swiper.' + type, detail);
-	        }
-	
-	        /**
-	         * translates to a given position in a given time in milliseconds
-	         *
-	         * @to        {number} number in pixels where to translate to
-	         * @duration  {number} time in milliseconds for the transistion
-	         * @ease      {string} easing css property
-	         */
-	        function translate(to, duration, ease) {
-	            var style = slideContainer && slideContainer.style;
-	
-	            if (style) {
-	                style[prefixes.transition + 'TimingFunction'] = ease;
-	                style[prefixes.transition + 'Duration'] = duration + 'ms';
-	
-	                if (prefixes.hasTranslate3d) {
-	                    style[prefixes.transform] = 'translate3d(' + to + 'px, 0, 0)';
-	                } else {
-	                    style[prefixes.transform] = 'translate(' + to + 'px, 0)';
-	                }
-	            }
-	
-	            // Fire events while sliding
-	            var count = 5;
-	            var eventInterval = window.setInterval(function () {
-	                dispatchSliderEvent('while', 'sliding');
-	                count--;
-	                if (count === 0) {
-	                    window.clearInterval(eventInterval);
-	                }
-	            }, duration / 5);
-	        }
-	
-	        /**
-	         * slidefunction called by prev, next & touchend
-	         *
-	         * determine nextIndex and slide to next postion
-	         * under restrictions of the defined options
-	         *
-	         * @direction  {boolean}
-	         */
-	        function slide(nextIndex, direction) {
-	            var _options3 = options,
-	                slideSpeed = _options3.slideSpeed,
-	                slidesToScroll = _options3.slidesToScroll,
-	                infinite = _options3.infinite,
-	                rewind = _options3.rewind,
-	                rewindSpeed = _options3.rewindSpeed,
-	                ease = _options3.ease,
-	                classNameActiveSlide = _options3.classNameActiveSlide,
-	                autoplay = _options3.autoplay;
+	    /**
+	     * private
+	     * setupInfinite: function to setup if infinite is set
+	     *
+	     * @param  {array} slideArray
+	     * @return {array} array of updated slideContainer elements
+	     */
+	    function setupInfinite(slideArray) {
+	        var _options2 = options,
+	            infinite = _options2.infinite;
 	
 	
-	            var duration = slideSpeed;
+	        var front = slideArray.slice(0, infinite);
+	        var back = slideArray.slice(slideArray.length - infinite, slideArray.length);
 	
-	            slider.style.direction = slider.style.direction || options.direction;
+	        front.forEach(function (element) {
+	            var cloned = element.cloneNode(true);
 	
-	            var nextSlide = direction ? index + 1 : index - 1;
-	            var maxOffset = Math.round(slidesWidth - frameWidth);
+	            slideContainer.appendChild(cloned);
+	        });
 	
-	            dispatchSliderEvent('before', 'slide', {
-	                index: index,
-	                nextSlide: nextSlide
-	            });
+	        back.reverse().forEach(function (element) {
+	            var cloned = element.cloneNode(true);
 	
-	            if (typeof nextIndex !== 'number') {
-	                if (direction) {
-	                    nextIndex = index + slidesToScroll;
-	                } else {
-	                    nextIndex = index - slidesToScroll;
-	                }
-	            }
+	            slideContainer.insertBefore(cloned, slideContainer.firstChild);
+	        });
 	
-	            nextIndex = Math.min(Math.max(nextIndex, 0), slides.length - 1);
+	        slideContainer.addEventListener(prefixes.transitionEnd, onTransitionEnd);
 	
-	            if (infinite && direction === undefined) {
-	                nextIndex += infinite;
-	            }
+	        return slice.call(slideContainer.children);
+	    }
 	
-	            // let nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * -1, maxOffset * -1), 0);
-	            var nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * (options.direction === 'ltr' ? -1 : 1), maxOffset * -1), 0);
-	            nextOffset = nextOffset * (options.direction === 'ltr' ? 1 : -1);
+	    /**
+	     * [dispatchSliderEvent description]
+	     * @return {[type]} [description]
+	     */
+	    function dispatchSliderEvent(phase, type, detail) {
+	        (0, _dispatchEvent2.default)(slider, phase + '.swiper.' + type, detail);
+	    }
 	
-	            if (rewind && Math.abs(position.x) === maxOffset && direction) {
-	                nextOffset = 0;
-	                nextIndex = 0;
-	                duration = rewindSpeed;
-	            }
+	    /**
+	     * translates to a given position in a given time in milliseconds
+	     *
+	     * @to        {number} number in pixels where to translate to
+	     * @duration  {number} time in milliseconds for the transistion
+	     * @ease      {string} easing css property
+	     */
+	    function translate(to, duration, ease) {
+	        var style = slideContainer && slideContainer.style;
 	
-	            /**
-	             * translate to the nextOffset by a defined duration and ease function
-	             */
-	            translate(nextOffset, duration, ease);
+	        if (style) {
+	            style[prefixes.transition + 'TimingFunction'] = ease;
+	            style[prefixes.transition + 'Duration'] = duration + 'ms';
 	
-	            /**
-	             * update the position with the next position
-	             */
-	            position.x = nextOffset;
-	
-	            /**
-	             * update the index with the nextIndex only if
-	             * the offset of the nextIndex is in the range of the maxOffset
-	             */
-	            if (slides[nextIndex].offsetLeft <= maxOffset) {
-	                index = nextIndex;
-	            }
-	
-	            if (infinite && (nextIndex === slides.length - infinite || nextIndex === 0)) {
-	                if (direction) {
-	                    index = infinite;
-	                }
-	
-	                if (!direction) {
-	                    index = slides.length - infinite * 2;
-	                }
-	
-	                position.x = slides[index].offsetLeft * -1;
-	
-	                transitionEndCallback = function transitionEndCallback() {
-	                    translate(slides[index].offsetLeft * -1, 0, undefined);
-	                };
-	            }
-	
-	            if (classNameActiveSlide) {
-	                setActiveElement(slice.call(slides), index);
-	            }
-	
-	            dispatchSliderEvent('after', 'slide', {
-	                currentSlide: index
-	            });
-	        }
-	
-	        /**
-	         * public
-	         * setup function
-	         */
-	        function setup() {
-	            dispatchSliderEvent('before', 'init');
-	
-	            prefixes = (0, _detectPrefixes2.default)();
-	            options = _extends({}, _defaults2.default, opts);
-	
-	            var _options4 = options,
-	                classNameFrame = _options4.classNameFrame,
-	                classNameSlideContainer = _options4.classNameSlideContainer,
-	                classNameDotsContainer = _options4.classNameDotsContainer,
-	                classNamePrevCtrl = _options4.classNamePrevCtrl,
-	                classNameNextCtrl = _options4.classNameNextCtrl,
-	                enableMouseEvents = _options4.enableMouseEvents,
-	                classNameActiveSlide = _options4.classNameActiveSlide;
-	
-	
-	            frame = slider.getElementsByClassName(classNameFrame)[0];
-	            slideContainer = frame.getElementsByClassName(classNameSlideContainer)[0];
-	            prevCtrl = slider.getElementsByClassName(classNamePrevCtrl)[0];
-	            nextCtrl = slider.getElementsByClassName(classNameNextCtrl)[0];
-	            dotsContainer = slider.getElementsByClassName(classNameDotsContainer)[0];
-	
-	            // set swiper direction
-	            options.direction = document.body.style.direction || options.direction;
-	
-	            // set pagination
-	            if (dotsContainer) {
-	                (0, _initPagination2.default)(slider, slideTo, options);
-	            }
-	
-	            position = {
-	                x: slideContainer.offsetLeft,
-	                y: slideContainer.offsetTop
-	            };
-	
-	            if (options.infinite) {
-	                slides = setupInfinite(slice.call(slideContainer.getElementsByClassName(_defaults2.default.classNameSlide)));
+	            if (prefixes.hasTranslate3d) {
+	                style[prefixes.transform] = 'translate3d(' + to + 'px, 0, 0)';
 	            } else {
-	                slides = slice.call(slideContainer.getElementsByClassName(_defaults2.default.classNameSlide));
+	                style[prefixes.transform] = 'translate(' + to + 'px, 0)';
 	            }
-	
-	            reset();
-	
-	            if (classNameActiveSlide) {
-	                setActiveElement(slides, index);
-	            }
-	
-	            // start autoplay
-	            startAutoplay();
-	
-	            // set prev and next controls
-	            if (prevCtrl && nextCtrl) {
-	                prevCtrl.addEventListener('click', prev);
-	                nextCtrl.addEventListener('click', next);
-	            }
-	
-	            frame.addEventListener('touchstart', onTouchstart);
-	
-	            if (enableMouseEvents) {
-	                frame.addEventListener('mousedown', onTouchstart);
-	                frame.addEventListener('click', onClick);
-	            }
-	
-	            options.window.addEventListener('resize', onResize);
-	
-	            dispatchSliderEvent('after', 'init');
 	        }
 	
-	        /**
-	         * public
-	         * reset function: called on resize
-	         */
-	        function reset() {
-	            var _options5 = options,
-	                infinite = _options5.infinite,
-	                ease = _options5.ease,
-	                rewindSpeed = _options5.rewindSpeed,
-	                rewindOnResize = _options5.rewindOnResize,
-	                classNameActiveSlide = _options5.classNameActiveSlide;
-	
-	
-	            slidesWidth = slideContainer.getBoundingClientRect().width || slideContainer.offsetWidth;
-	            frameWidth = frame.getBoundingClientRect().width || frame.offsetWidth;
-	
-	            if (frameWidth === slidesWidth) {
-	                slidesWidth = slides.reduce(function (previousValue, slide) {
-	                    return previousValue + slide.getBoundingClientRect().width || slide.offsetWidth;
-	                }, 0);
+	        // Fire events while sliding
+	        var count = 5;
+	        var eventInterval = window.setInterval(function () {
+	            dispatchSliderEvent('while', 'sliding');
+	            count--;
+	            if (count === 0) {
+	                window.clearInterval(eventInterval);
 	            }
+	        }, duration / 5);
+	    }
 	
-	            if (slidesWidth === 0) {
-	                slidesWidth = slides.length / (typeof infinite === "number" ? infinite : 1) * frameWidth;
-	            }
+	    /**
+	     * slidefunction called by prev, next & touchend
+	     *
+	     * determine nextIndex and slide to next postion
+	     * under restrictions of the defined options
+	     *
+	     * @direction  {boolean}
+	     */
+	    function slide(nextIndex, direction) {
+	        var _options3 = options,
+	            slideSpeed = _options3.slideSpeed,
+	            slidesToScroll = _options3.slidesToScroll,
+	            infinite = _options3.infinite,
+	            rewind = _options3.rewind,
+	            rewindSpeed = _options3.rewindSpeed,
+	            ease = _options3.ease,
+	            classNameActiveSlide = _options3.classNameActiveSlide,
+	            autoplay = _options3.autoplay;
 	
-	            if (rewindOnResize) {
-	                index = 0;
+	
+	        var duration = slideSpeed;
+	
+	        slider.style.direction = slider.style.direction || options.direction;
+	
+	        var nextSlide = direction ? index + 1 : index - 1;
+	        var maxOffset = Math.round(slidesWidth - frameWidth);
+	
+	        dispatchSliderEvent('before', 'slide', {
+	            index: index,
+	            nextSlide: nextSlide
+	        });
+	
+	        if (typeof nextIndex !== 'number') {
+	            if (direction) {
+	                nextIndex = index + slidesToScroll;
 	            } else {
-	                ease = null;
-	                rewindSpeed = 0;
+	                nextIndex = index - slidesToScroll;
 	            }
+	        }
 	
-	            if (infinite) {
-	                translate(slides[index + infinite].offsetLeft * (options.direction === 'ltr' ? -1 : 1), 0, null);
+	        nextIndex = Math.min(Math.max(nextIndex, 0), slides.length - 1);
 	
-	                index = index + infinite;
-	                position.x = slides[index].offsetLeft * (options.direction === 'ltr' ? -1 : 1);
-	            } else {
-	                // position.x = slides[index].offsetLeft * (options.direction === 'ltr' ? -1 : 1);
-	                position.x = 0;
-	            }
+	        if (infinite && direction === undefined) {
+	            nextIndex += infinite;
+	        }
 	
-	            if (classNameActiveSlide) {
-	                setActiveElement(slice.call(slides), index);
-	            }
+	        // let nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * -1, maxOffset * -1), 0);
+	        var nextOffset = Math.min(Math.max(slides[nextIndex].offsetLeft * (options.direction === 'ltr' ? -1 : 1), maxOffset * -1), 0);
+	        nextOffset = nextOffset * (options.direction === 'ltr' ? 1 : -1);
+	
+	        if (rewind && Math.abs(position.x) === maxOffset && direction) {
+	            nextOffset = 0;
+	            nextIndex = 0;
+	            duration = rewindSpeed;
 	        }
 	
 	        /**
-	         * public
-	         * slideTo: called on clickhandler
+	         * translate to the nextOffset by a defined duration and ease function
 	         */
-	        function slideTo(index) {
-	            slide(index);
-	        }
+	        translate(nextOffset, duration, ease);
 	
 	        /**
-	         * public
-	         * returnIndex function: called on clickhandler
+	         * update the position with the next position
 	         */
-	        function returnIndex() {
-	            return index - options.infinite || 0;
-	        }
+	        position.x = nextOffset;
 	
 	        /**
-	         * public
-	         * prev function: called on clickhandler
+	         * update the index with the nextIndex only if
+	         * the offset of the nextIndex is in the range of the maxOffset
 	         */
-	        function prev() {
-	            slide(false, options.direction === 'ltr' ? false : true);
+	        if (slides[nextIndex].offsetLeft <= maxOffset) {
+	            index = nextIndex;
 	        }
 	
-	        /**
-	         * public
-	         * next function: called on clickhandler
-	         */
-	        function next() {
-	            slide(false, options.direction === 'ltr' ? true : false);
-	        }
-	
-	        /**
-	         * public
-	         * destroy function: called to gracefully destroy the swiper instance
-	         */
-	        function destroy() {
-	            dispatchSliderEvent('before', 'destroy');
-	
-	            // remove event listeners
-	            frame.removeEventListener(prefixes.transitionEnd, onTransitionEnd);
-	            frame.removeEventListener('touchstart', onTouchstart);
-	            frame.removeEventListener('touchmove', onTouchmove);
-	            frame.removeEventListener('touchend', onTouchend);
-	            frame.removeEventListener('mousemove', onTouchmove);
-	            frame.removeEventListener('mousedown', onTouchstart);
-	            frame.removeEventListener('mouseup', onTouchend);
-	            frame.removeEventListener('mouseleave', onTouchend);
-	            frame.removeEventListener('click', onClick);
-	
-	            options.window.removeEventListener('resize', onResize);
-	
-	            if (prevCtrl) {
-	                prevCtrl.removeEventListener('click', prev);
+	        if (infinite && (nextIndex === slides.length - infinite || nextIndex === 0)) {
+	            if (direction) {
+	                index = infinite;
 	            }
 	
-	            if (nextCtrl) {
-	                nextCtrl.removeEventListener('click', next);
+	            if (!direction) {
+	                index = slides.length - infinite * 2;
 	            }
 	
-	            if (onAutoplayStart) {
-	                window.clearInterval(onAutoplayStart);
-	            }
+	            position.x = slides[index].offsetLeft * -1;
 	
-	            // remove cloned slides if infinite is set
-	            if (options.infinite) {
-	                Array.apply(null, Array(options.infinite)).forEach(function () {
-	                    slideContainer.removeChild(slideContainer.firstChild);
-	                    slideContainer.removeChild(slideContainer.lastChild);
-	                });
-	            }
-	
-	            dispatchSliderEvent('after', 'destroy');
-	        }
-	
-	        // event handling
-	
-	        var touchOffset = void 0;
-	        var delta = void 0;
-	        var isScrolling = void 0;
-	
-	        function onTransitionEnd() {
-	            if (transitionEndCallback) {
-	                transitionEndCallback();
-	
-	                transitionEndCallback = undefined;
-	            }
-	        }
-	
-	        function onTouchstart(event) {
-	            var _options6 = options,
-	                enableMouseEvents = _options6.enableMouseEvents;
-	
-	            var touches = event.touches ? event.touches[0] : event;
-	
-	            if (enableMouseEvents) {
-	                frame.addEventListener('mousemove', onTouchmove);
-	                frame.addEventListener('mouseup', onTouchend);
-	                frame.addEventListener('mouseleave', onTouchend);
-	            }
-	
-	            frame.addEventListener('touchmove', onTouchmove);
-	            frame.addEventListener('touchend', onTouchend);
-	
-	            var pageX = touches.pageX,
-	                pageY = touches.pageY;
-	
-	
-	            touchOffset = {
-	                x: pageX,
-	                y: pageY,
-	                time: Date.now()
+	            transitionEndCallback = function transitionEndCallback() {
+	                translate(slides[index].offsetLeft * -1, 0, undefined);
 	            };
-	
-	            isScrolling = undefined;
-	
-	            delta = {};
-	
-	            dispatchSliderEvent('on', 'touchstart', {
-	                event: event
-	            });
 	        }
 	
-	        function onTouchmove(event) {
-	            stopAutoplay();
-	
-	            var touches = event.touches ? event.touches[0] : event;
-	            var pageX = touches.pageX,
-	                pageY = touches.pageY;
-	
-	
-	            delta = {
-	                x: pageX - touchOffset.x,
-	                y: pageY - touchOffset.y
-	            };
-	
-	            if (typeof isScrolling === 'undefined') {
-	                isScrolling = !!(isScrolling || Math.abs(delta.x) < Math.abs(delta.y));
-	            }
-	
-	            if (!isScrolling && touchOffset) {
-	                event.preventDefault();
-	                translate(position.x + delta.x, 0, null);
-	            }
-	
-	            // may be
-	            dispatchSliderEvent('on', 'touchmove', {
-	                event: event
-	            });
+	        if (classNameActiveSlide) {
+	            setActiveElement(slice.call(slides), index);
 	        }
 	
-	        function onTouchend(event) {
-	            /**
-	             * time between touchstart and touchend in milliseconds
-	             * @duration {number}
-	             */
-	            var duration = touchOffset ? Date.now() - touchOffset.time : undefined;
+	        dispatchSliderEvent('after', 'slide', {
+	            currentSlide: index
+	        });
+	    }
 	
-	            /**
-	             * is valid if:
-	             *
-	             * -> swipe attempt time is over 300 ms
-	             * and
-	             * -> swipe distance is greater than 25px
-	             * or
-	             * -> swipe distance is more then a third of the swipe area
-	             *
-	             * @isValidSlide {Boolean}
-	             */
-	            var isValid = Number(duration) < 300 && Math.abs(delta.x) > 25 || Math.abs(delta.x) > frameWidth / 3;
+	    /**
+	     * public
+	     * setup function
+	     */
+	    function setup() {
+	        dispatchSliderEvent('before', 'init');
 	
-	            /**
-	             * is out of bounds if:
-	             *
-	             * -> index is 0 and delta x is greater than 0
-	             * or
-	             * -> index is the last slide and delta is smaller than 0
-	             *
-	             * @isOutOfBounds {Boolean}
-	             */
-	            var isOutOfBounds = !index && (options.direction === 'ltr' ? delta.x > 0 : delta.x <= 0) || index === slides.length - 1 && (options.direction === 'ltr' ? delta.x < 0 : delta.x >= 0);
+	        prefixes = (0, _detectPrefixes2.default)();
+	        options = _extends({}, _defaults2.default, opts);
 	
-	            var direction = options.direction === 'ltr' ? delta.x < 0 : delta.x >= 0;
+	        var _options4 = options,
+	            classNameFrame = _options4.classNameFrame,
+	            classNameSlideContainer = _options4.classNameSlideContainer,
+	            classNameDotsContainer = _options4.classNameDotsContainer,
+	            classNamePrevCtrl = _options4.classNamePrevCtrl,
+	            classNameNextCtrl = _options4.classNameNextCtrl,
+	            enableMouseEvents = _options4.enableMouseEvents,
+	            classNameActiveSlide = _options4.classNameActiveSlide,
+	            classNameDisabled = _options4.classNameDisabled;
 	
-	            if (!isScrolling) {
-	                if (isValid && !isOutOfBounds) {
-	                    slide(false, direction);
-	                } else {
-	                    translate(position.x, options.snapBackSpeed);
-	                }
-	            }
 	
-	            touchOffset = undefined;
+	        frame = slider.getElementsByClassName(classNameFrame)[0];
+	        slideContainer = frame.getElementsByClassName(classNameSlideContainer)[0];
+	        prevCtrl = slider.getElementsByClassName(classNamePrevCtrl)[0];
+	        nextCtrl = slider.getElementsByClassName(classNameNextCtrl)[0];
+	        dotsContainer = slider.getElementsByClassName(classNameDotsContainer)[0];
 	
-	            /**
-	             * remove eventlisteners after swipe attempt
-	             */
-	            frame.removeEventListener('touchmove', onTouchmove);
-	            frame.removeEventListener('touchend', onTouchend);
-	            frame.removeEventListener('mousemove', onTouchmove);
-	            frame.removeEventListener('mouseup', onTouchend);
-	            frame.removeEventListener('mouseleave', onTouchend);
+	        // set swiper direction
+	        options.direction = document.body.style.direction || options.direction;
 	
-	            startAutoplay();
-	
-	            dispatchSliderEvent('on', 'touchend', {
-	                event: event
-	            });
+	        // set pagination
+	        if (dotsContainer) {
+	            (0, _initPagination2.default)(slider, slideTo, options);
 	        }
 	
-	        function onClick(event) {
-	            if (delta.x) {
-	                event.preventDefault();
-	            }
-	        }
-	
-	        function onResize(event) {
-	            reset();
-	
-	            dispatchSliderEvent('on', 'resize', {
-	                event: event
-	            });
-	        }
-	
-	        function startAutoplay() {
-	            // set autoplay
-	            if (options.autoplay) {
-	                onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
-	            }
-	        }
-	
-	        function stopAutoplay() {
-	            if (onAutoplayStart) {
-	                window.clearInterval(onAutoplayStart);
-	            }
-	        }
-	
-	        // trigger initial setup
-	        setup();
-	
-	        // expose public api
-	        return {
-	            setup: setup,
-	            reset: reset,
-	            slideTo: slideTo,
-	            returnIndex: returnIndex,
-	            prev: prev,
-	            next: next,
-	            destroy: destroy
+	        position = {
+	            x: slideContainer.offsetLeft,
+	            y: slideContainer.offsetTop
 	        };
-	    };
 	
-	    window.swiper = swiper;
-	})();
+	        if (options.infinite) {
+	            slides = setupInfinite(slice.call(slideContainer.getElementsByClassName(_defaults2.default.classNameSlide)));
+	        } else {
+	            slides = slice.call(slideContainer.getElementsByClassName(_defaults2.default.classNameSlide));
+	        }
+	
+	        reset();
+	
+	        if (classNameActiveSlide) {
+	            setActiveElement(slides, index);
+	        }
+	
+	        // start autoplay
+	        startAutoplay();
+	
+	        // set prev and next controls
+	        if (prevCtrl && nextCtrl) {
+	            prevCtrl.addEventListener('click', prev);
+	            nextCtrl.addEventListener('click', next);
+	        }
+	
+	        frame.addEventListener('touchstart', onTouchstart);
+	
+	        if (enableMouseEvents) {
+	            frame.addEventListener('mousedown', onTouchstart);
+	            frame.addEventListener('click', onClick);
+	        }
+	
+	        options.window.addEventListener('resize', onResize);
+	
+	        dispatchSliderEvent('after', 'init');
+	    }
+	
+	    /**
+	     * public
+	     * reset function: called on resize
+	     */
+	    function reset() {
+	        var _options5 = options,
+	            infinite = _options5.infinite,
+	            ease = _options5.ease,
+	            rewindSpeed = _options5.rewindSpeed,
+	            rewindOnResize = _options5.rewindOnResize,
+	            classNameActiveSlide = _options5.classNameActiveSlide;
+	
+	
+	        slidesWidth = slideContainer.getBoundingClientRect().width || slideContainer.offsetWidth;
+	        frameWidth = frame.getBoundingClientRect().width || frame.offsetWidth;
+	
+	        if (frameWidth === slidesWidth) {
+	            slidesWidth = slides.reduce(function (previousValue, slide) {
+	                return previousValue + slide.getBoundingClientRect().width || slide.offsetWidth;
+	            }, 0);
+	        }
+	
+	        if (slidesWidth === 0) {
+	            slidesWidth = slides.length / (typeof infinite === "number" ? infinite : 1) * frameWidth;
+	        }
+	
+	        if (rewindOnResize) {
+	            index = 0;
+	        } else {
+	            ease = null;
+	            rewindSpeed = 0;
+	        }
+	
+	        if (infinite) {
+	            translate(slides[index + infinite].offsetLeft * (options.direction === 'ltr' ? -1 : 1), 0, null);
+	
+	            index = index + infinite;
+	            position.x = slides[index].offsetLeft * (options.direction === 'ltr' ? -1 : 1);
+	        } else {
+	            // position.x = slides[index].offsetLeft * (options.direction === 'ltr' ? -1 : 1);
+	            position.x = 0;
+	        }
+	
+	        if (classNameActiveSlide) {
+	            setActiveElement(slice.call(slides), index);
+	        }
+	    }
+	
+	    /**
+	     * public
+	     * slideTo: called on clickhandler
+	     */
+	    function slideTo(index) {
+	        slide(index);
+	    }
+	
+	    /**
+	     * public
+	     * returnIndex function: called on clickhandler
+	     */
+	    function returnIndex() {
+	        return index - options.infinite || 0;
+	    }
+	
+	    /**
+	     * public
+	     * prev function: called on clickhandler
+	     */
+	    function prev() {
+	        slide(false, options.direction === 'ltr' ? false : true);
+	    }
+	
+	    /**
+	     * public
+	     * next function: called on clickhandler
+	     */
+	    function next() {
+	        slide(false, options.direction === 'ltr' ? true : false);
+	    }
+	
+	    /**
+	     * public
+	     * destroy function: called to gracefully destroy the swiper instance
+	     */
+	    function destroy() {
+	        dispatchSliderEvent('before', 'destroy');
+	
+	        // remove event listeners
+	        frame.removeEventListener(prefixes.transitionEnd, onTransitionEnd);
+	        frame.removeEventListener('touchstart', onTouchstart);
+	        frame.removeEventListener('touchmove', onTouchmove);
+	        frame.removeEventListener('touchend', onTouchend);
+	        frame.removeEventListener('mousemove', onTouchmove);
+	        frame.removeEventListener('mousedown', onTouchstart);
+	        frame.removeEventListener('mouseup', onTouchend);
+	        frame.removeEventListener('mouseleave', onTouchend);
+	        frame.removeEventListener('click', onClick);
+	
+	        options.window.removeEventListener('resize', onResize);
+	
+	        if (prevCtrl) {
+	            prevCtrl.removeEventListener('click', prev);
+	        }
+	
+	        if (nextCtrl) {
+	            nextCtrl.removeEventListener('click', next);
+	        }
+	
+	        if (onAutoplayStart) {
+	            window.clearInterval(onAutoplayStart);
+	        }
+	
+	        // remove cloned slides if infinite is set
+	        if (options.infinite) {
+	            Array.apply(null, Array(options.infinite)).forEach(function () {
+	                slideContainer.removeChild(slideContainer.firstChild);
+	                slideContainer.removeChild(slideContainer.lastChild);
+	            });
+	        }
+	
+	        dispatchSliderEvent('after', 'destroy');
+	    }
+	
+	    // event handling
+	
+	    var touchOffset = void 0;
+	    var delta = void 0;
+	    var isScrolling = void 0;
+	
+	    function onTransitionEnd() {
+	        if (transitionEndCallback) {
+	            transitionEndCallback();
+	
+	            transitionEndCallback = undefined;
+	        }
+	    }
+	
+	    function onTouchstart(event) {
+	        var _options6 = options,
+	            enableMouseEvents = _options6.enableMouseEvents;
+	
+	        var touches = event.touches ? event.touches[0] : event;
+	
+	        if (enableMouseEvents) {
+	            frame.addEventListener('mousemove', onTouchmove);
+	            frame.addEventListener('mouseup', onTouchend);
+	            frame.addEventListener('mouseleave', onTouchend);
+	        }
+	
+	        frame.addEventListener('touchmove', onTouchmove);
+	        frame.addEventListener('touchend', onTouchend);
+	
+	        var pageX = touches.pageX,
+	            pageY = touches.pageY;
+	
+	
+	        touchOffset = {
+	            x: pageX,
+	            y: pageY,
+	            time: Date.now()
+	        };
+	
+	        isScrolling = undefined;
+	
+	        delta = {};
+	
+	        dispatchSliderEvent('on', 'touchstart', {
+	            event: event
+	        });
+	    }
+	
+	    function onTouchmove(event) {
+	        stopAutoplay();
+	
+	        var touches = event.touches ? event.touches[0] : event;
+	        var pageX = touches.pageX,
+	            pageY = touches.pageY;
+	
+	
+	        delta = {
+	            x: pageX - touchOffset.x,
+	            y: pageY - touchOffset.y
+	        };
+	
+	        if (typeof isScrolling === 'undefined') {
+	            isScrolling = !!(isScrolling || Math.abs(delta.x) < Math.abs(delta.y));
+	        }
+	
+	        if (!isScrolling && touchOffset) {
+	            event.preventDefault();
+	            translate(position.x + delta.x, 0, null);
+	        }
+	
+	        // may be
+	        dispatchSliderEvent('on', 'touchmove', {
+	            event: event
+	        });
+	    }
+	
+	    function onTouchend(event) {
+	        /**
+	         * time between touchstart and touchend in milliseconds
+	         * @duration {number}
+	         */
+	        var duration = touchOffset ? Date.now() - touchOffset.time : undefined;
+	
+	        /**
+	         * is valid if:
+	         *
+	         * -> swipe attempt time is over 300 ms
+	         * and
+	         * -> swipe distance is greater than 25px
+	         * or
+	         * -> swipe distance is more then a third of the swipe area
+	         *
+	         * @isValidSlide {Boolean}
+	         */
+	        var isValid = Number(duration) < 300 && Math.abs(delta.x) > 25 || Math.abs(delta.x) > frameWidth / 3;
+	
+	        /**
+	         * is out of bounds if:
+	         *
+	         * -> index is 0 and delta x is greater than 0
+	         * or
+	         * -> index is the last slide and delta is smaller than 0
+	         *
+	         * @isOutOfBounds {Boolean}
+	         */
+	        var isOutOfBounds = !index && (options.direction === 'ltr' ? delta.x > 0 : delta.x <= 0) || index === slides.length - 1 && (options.direction === 'ltr' ? delta.x < 0 : delta.x >= 0);
+	
+	        var direction = options.direction === 'ltr' ? delta.x < 0 : delta.x >= 0;
+	
+	        if (!isScrolling) {
+	            if (isValid && !isOutOfBounds) {
+	                slide(false, direction);
+	            } else {
+	                translate(position.x, options.snapBackSpeed);
+	            }
+	        }
+	
+	        touchOffset = undefined;
+	
+	        /**
+	         * remove eventlisteners after swipe attempt
+	         */
+	        frame.removeEventListener('touchmove', onTouchmove);
+	        frame.removeEventListener('touchend', onTouchend);
+	        frame.removeEventListener('mousemove', onTouchmove);
+	        frame.removeEventListener('mouseup', onTouchend);
+	        frame.removeEventListener('mouseleave', onTouchend);
+	
+	        startAutoplay();
+	
+	        dispatchSliderEvent('on', 'touchend', {
+	            event: event
+	        });
+	    }
+	
+	    function onClick(event) {
+	        if (delta.x) {
+	            event.preventDefault();
+	        }
+	    }
+	
+	    function onResize(event) {
+	        reset();
+	
+	        dispatchSliderEvent('on', 'resize', {
+	            event: event
+	        });
+	    }
+	
+	    function startAutoplay() {
+	        // set autoplay
+	        if (options.autoplay) {
+	            onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
+	        }
+	    }
+	
+	    function stopAutoplay() {
+	        if (onAutoplayStart) {
+	            window.clearInterval(onAutoplayStart);
+	        }
+	    }
+	
+	    // trigger initial setup
+	    setup();
+	
+	    // expose public api
+	    return {
+	        setup: setup,
+	        reset: reset,
+	        slideTo: slideTo,
+	        returnIndex: returnIndex,
+	        prev: prev,
+	        next: next,
+	        destroy: destroy
+	    };
+	};
+	
+	window.swiper = swiper;
 
 /***/ },
 /* 2 */
@@ -910,6 +917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function initAutoplay(slide, options) {
 	    var autoplayTime = typeof options.autoplay === 'number' ? options.autoplay : 3000;
+	    console.log('autoplayTime: ', autoplayTime);
 	    var onAutoplayStart = window.setInterval(function () {
 	        slide(false, true);
 	    }, autoplayTime);
@@ -986,13 +994,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  /**
 	   * class name for slide
-	   * @classNameSlideContainer {string}
+	   * @classNameSlide {string}
 	   */
 	  classNameSlide: 'js_slide',
 	
 	  /**
 	   * class name for dots container
-	   * @classNameSlideContainer {string}
+	   * @classNameDotsContainer {string}
 	   */
 	  classNameDotsContainer: 'js_dots',
 	
@@ -1014,6 +1022,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @classNameActiveSlide {string}
 	   */
 	  classNameActiveSlide: 'active',
+	
+	  /**
+	   * class name for disabled prev / next control
+	   * @classNameDisabled {string}
+	   */
+	  classNameDisabled: 'disabled',
 	
 	  /**
 	   * enables mouse events for swiping on desktop devices

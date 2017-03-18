@@ -7,7 +7,6 @@ import defaults             from './defaults.js';
 
 const slice = Array.prototype.slice;
 
-(function () {
 // 'use strict';
 let swiper = function (slider, opts) {
     let position;
@@ -51,6 +50,14 @@ let swiper = function (slider, opts) {
         });
 
         slides[currentIndex].classList.add(classNameActiveSlide);
+
+        if (prevCtrl) {
+            (currentIndex === 0) ? prevCtrl.classList.add(options.classNameDisabled) : prevCtrl.classList.remove(options.classNameDisabled);
+        }
+
+        if (nextCtrl && !options.rewind) {
+            ((currentIndex + 1) === slides.length) ? nextCtrl.classList.add(options.classNameDisabled) : nextCtrl.classList.remove(options.classNameDisabled);
+        }
     }
 
     /**
@@ -240,7 +247,8 @@ let swiper = function (slider, opts) {
             classNamePrevCtrl,
             classNameNextCtrl,
             enableMouseEvents,
-            classNameActiveSlide
+            classNameActiveSlide,
+            classNameDisabled
         } = options;
 
         frame = slider.getElementsByClassName(classNameFrame)[0];
@@ -587,4 +595,3 @@ let swiper = function (slider, opts) {
 }
 
 window.swiper = swiper;
-})();

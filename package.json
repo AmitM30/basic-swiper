@@ -1,6 +1,6 @@
 {
   "name": "basic-swiper",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Basic Swiper written in native javascript. Support Touch.",
   "author": {
     "name": "Amit M",
@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/AmitM30/basic-swiper/issues"
   },
-  "inceptionYear": 2015,
+  "inceptionYear": 2016,
   "licenses": [
     {
       "type": "MIT",

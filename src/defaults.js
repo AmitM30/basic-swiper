@@ -58,13 +58,13 @@ export default {
 
     /**
      * class name for slide
-     * @classNameSlideContainer {string}
+     * @classNameSlide {string}
      */
     classNameSlide: 'js_slide',
 
     /**
      * class name for dots container
-     * @classNameSlideContainer {string}
+     * @classNameDotsContainer {string}
      */
     classNameDotsContainer: 'js_dots',
 
@@ -86,6 +86,12 @@ export default {
      * @classNameActiveSlide {string}
      */
     classNameActiveSlide: 'active',
+
+    /**
+     * class name for disabled prev / next control
+     * @classNameDisabled {string}
+     */
+    classNameDisabled: 'disabled',
 
     /**
      * enables mouse events for swiping on desktop devices

@@ -1,6 +1,6 @@
 
 ## Swiper
-[![license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/meandmax/lory/master/LICENSE)
+[![license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/AmitM30/basic-swiper/master/LICENSE)
 
 Touch enabled minimalistic slider written in vanilla JavaScript.
 
@@ -23,7 +23,7 @@ bower install basic-swiper --save
     document.addEventListener('DOMContentLoaded', () => {
         const slider = document.querySelector('.js_slider');
         swiper(slider, {
-            // options going here
+            // options
         });
     });
 ```
@@ -187,6 +187,18 @@ li img {
         <td>default: 'js_prev'</td>
     </tr>
     <tr>
+        <td>classNameNextCtrl</td>
+        <td>default: 'js_next'</td>
+    </tr>
+    <tr>
+        <td>classNameActiveSlide</td>
+        <td>default: 'active'</td>
+    </tr>
+    <tr>
+        <td>classNameDisabled</td>
+        <td>default: 'disabled'</td>
+    </tr>
+    <tr>
         <td>autoplay</td>
         <td>default: false</td>
     </tr>
@@ -252,7 +264,6 @@ li img {
 * FireFox
 * Opera
 * Internet Explorer 10+
-
 * Internet Explorer 9
     - graceful, no transitions
     - need to polyfill classlist (https://github.com/eligrey/classList.js/)
