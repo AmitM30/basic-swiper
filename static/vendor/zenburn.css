@@ -12,6 +12,7 @@ based on dark.css by Ivan Sagalaev
   background: #3f3f3f;
   color: #dcdcdc;
   -webkit-text-size-adjust: none;
+  -ms-text-size-adjust: none;
 }
 
 .hljs-keyword,
