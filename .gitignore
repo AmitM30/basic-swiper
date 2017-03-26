@@ -7,4 +7,6 @@ npm-debug.log
 .AppleDouble/
 .DS_Store
 
+.codeclimate.yml
+
 debug.log

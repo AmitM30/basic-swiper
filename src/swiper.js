@@ -147,8 +147,7 @@ let swiper = function (slider, opts) {
             rewind,
             rewindSpeed,
             ease,
-            classNameActiveSlide,
-            autoplay
+            classNameActiveSlide
         } = options;
 
         let duration = slideSpeed;
@@ -247,8 +246,7 @@ let swiper = function (slider, opts) {
             classNamePrevCtrl,
             classNameNextCtrl,
             enableMouseEvents,
-            classNameActiveSlide,
-            classNameDisabled
+            classNameActiveSlide
         } = options;
 
         frame = slider.getElementsByClassName(classNameFrame)[0];
@@ -320,7 +318,7 @@ let swiper = function (slider, opts) {
         }
 
         if (slidesWidth === 0) {
-            slidesWidth = (slides.length / (typeof infinite === "number" ? infinite : 1)) * frameWidth;
+            slidesWidth = (slides.length / (typeof infinite === 'number' ? infinite : 1)) * frameWidth;
         }
 
         if (rewindOnResize) {
@@ -366,7 +364,7 @@ let swiper = function (slider, opts) {
      * prev function: called on clickhandler
      */
     function prev () {
-        slide(false, (options.direction === 'ltr') ? false : true);
+        slide(false, !(options.direction === 'ltr'));
     }
 
     /**
@@ -374,7 +372,7 @@ let swiper = function (slider, opts) {
      * next function: called on clickhandler
      */
     function next () {
-        slide(false, (options.direction === 'ltr') ? true : false);
+        slide(false, options.direction === 'ltr');
     }
 
     /**
@@ -509,8 +507,8 @@ let swiper = function (slider, opts) {
          * @isValidSlide {Boolean}
          */
         const isValid = Number(duration) < 300 &&
-            Math.abs(delta.x) > 25 ||
-            Math.abs(delta.x) > frameWidth / 3;
+            (Math.abs(delta.x) > 25 ||
+            Math.abs(delta.x) > frameWidth / 3);
 
         /**
          * is out of bounds if:
@@ -569,7 +567,7 @@ let swiper = function (slider, opts) {
     function startAutoplay () {
         // set autoplay
         if (options.autoplay) {
-            onAutoplayStart = initAutoplay(slide, options)
+            onAutoplayStart = initAutoplay(slide, options);
         }
     }
 
@@ -592,6 +590,6 @@ let swiper = function (slider, opts) {
         next,
         destroy
     };
-}
+};
 
 window.swiper = swiper;

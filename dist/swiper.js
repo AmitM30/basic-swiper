@@ -232,8 +232,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            rewind = _options3.rewind,
 	            rewindSpeed = _options3.rewindSpeed,
 	            ease = _options3.ease,
-	            classNameActiveSlide = _options3.classNameActiveSlide,
-	            autoplay = _options3.autoplay;
+	            classNameActiveSlide = _options3.classNameActiveSlide;
 	
 	
 	        var duration = slideSpeed;
@@ -332,8 +331,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            classNamePrevCtrl = _options4.classNamePrevCtrl,
 	            classNameNextCtrl = _options4.classNameNextCtrl,
 	            enableMouseEvents = _options4.enableMouseEvents,
-	            classNameActiveSlide = _options4.classNameActiveSlide,
-	            classNameDisabled = _options4.classNameDisabled;
+	            classNameActiveSlide = _options4.classNameActiveSlide;
 	
 	
 	        frame = slider.getElementsByClassName(classNameFrame)[0];
@@ -411,7 +409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        if (slidesWidth === 0) {
-	            slidesWidth = slides.length / (typeof infinite === "number" ? infinite : 1) * frameWidth;
+	            slidesWidth = slides.length / (typeof infinite === 'number' ? infinite : 1) * frameWidth;
 	        }
 	
 	        if (rewindOnResize) {
@@ -457,7 +455,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * prev function: called on clickhandler
 	     */
 	    function prev() {
-	        slide(false, options.direction === 'ltr' ? false : true);
+	        slide(false, !(options.direction === 'ltr'));
 	    }
 	
 	    /**
@@ -465,7 +463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * next function: called on clickhandler
 	     */
 	    function next() {
-	        slide(false, options.direction === 'ltr' ? true : false);
+	        slide(false, options.direction === 'ltr');
 	    }
 	
 	    /**
@@ -605,7 +603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         *
 	         * @isValidSlide {Boolean}
 	         */
-	        var isValid = Number(duration) < 300 && Math.abs(delta.x) > 25 || Math.abs(delta.x) > frameWidth / 3;
+	        var isValid = Number(duration) < 300 && (Math.abs(delta.x) > 25 || Math.abs(delta.x) > frameWidth / 3);
 	
 	        /**
 	         * is out of bounds if:
@@ -796,11 +794,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	// var NativeCustomEvent = global.CustomEvent;
 	
 	function useNative() {
-	  try {
-	    var p = new global.CustomEvent('cat', { detail: { foo: 'bar' } });
-	    return 'cat' === p.type && 'bar' === p.detail.foo;
-	  } catch (e) {}
-	  return false;
+	    try {
+	        var p = new global.CustomEvent('cat', { detail: { foo: 'bar' } });
+	        return 'cat' === p.type && 'bar' === p.detail.foo;
+	    } catch (e) {}
+	    return false;
 	}
 	
 	/**
@@ -811,33 +809,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @public
 	 */
 	
-	module.exports = useNative() ? global.CustomEvent :
-	
-	// IE >= 9
+	module.exports = useNative() ? global.CustomEvent : // IE >= 9
 	'undefined' !== typeof document && 'function' === typeof document.createEvent ? function CustomEvent(type, params) {
-	  var e = document.createEvent('CustomEvent');
-	  if (params) {
-	    e.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
-	  } else {
-	    e.initCustomEvent(type, false, false, void 0);
-	  }
-	  return e;
-	} :
-	
-	// IE <= 8
+	    var e = document.createEvent('CustomEvent');
+	    if (params) {
+	        e.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
+	    } else {
+	        e.initCustomEvent(type, false, false, void 0);
+	    }
+	    return e;
+	} : // IE <= 8
 	function CustomEvent(type, params) {
-	  var e = document.createEventObject();
-	  e.type = type;
-	  if (params) {
-	    e.bubbles = Boolean(params.bubbles);
-	    e.cancelable = Boolean(params.cancelable);
-	    e.detail = params.detail;
-	  } else {
-	    e.bubbles = false;
-	    e.cancelable = false;
-	    e.detail = void 0;
-	  }
-	  return e;
+	    var e = document.createEventObject();
+	    e.type = type;
+	    if (params) {
+	        e.bubbles = Boolean(params.bubbles);
+	        e.cancelable = Boolean(params.cancelable);
+	        e.detail = params.detail;
+	    } else {
+	        e.bubbles = false;
+	        e.cancelable = false;
+	        e.detail = void 0;
+	    }
+	    return e;
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
@@ -860,35 +854,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {element} options     slider options
 	 */
 	function initPagination(slider, slideTo, options) {
-	    var dot_count = slider.querySelectorAll('.' + options.classNameSlide).length;
-	    var dot_container = slider.querySelector('.' + options.classNameDotsContainer);
-	    var dot_list_item = document.createElement('li');
-	    dot_list_item.className = 'swiper-pagination-bullet';
+	    var dotCount = slider.querySelectorAll('.' + options.classNameSlide).length;
+	    var dotContainer = slider.querySelector('.' + options.classNameDotsContainer);
+	    var dotListItem = document.createElement('li');
+	    dotListItem.className = 'swiper-pagination-bullet';
 	
 	    function handleDotEvent(e) {
 	        if (e.type === 'before.swiper.init') {}
 	        if (e.type === 'after.swiper.init') {
-	            for (var i = 0, len = dot_count; i < len; i++) {
-	                var clone = dot_list_item.cloneNode();
-	                dot_container.appendChild(clone);
+	            for (var i = 0, len = dotCount; i < len; i++) {
+	                var clone = dotListItem.cloneNode();
+	                dotContainer.appendChild(clone);
 	
-	                dot_container.childNodes[i].addEventListener('click', function (e) {
-	                    slideTo(Array.prototype.indexOf.call(dot_container.childNodes, e.target));
+	                dotContainer.childNodes[i].addEventListener('click', function (e) {
+	                    slideTo(Array.prototype.indexOf.call(dotContainer.childNodes, e.target));
 	                });
 	            }
-	            dot_container.childNodes[0].classList.add('active');
+	            dotContainer.childNodes[0].classList.add('active');
 	        }
 	        if (e.type === 'after.swiper.slide') {
-	            for (var _i = 0, _len = dot_container.childNodes.length; _i < _len; _i++) {
-	                dot_container.childNodes[_i].classList.remove('active');
+	            for (var _i = 0, _len = dotContainer.childNodes.length; _i < _len; _i++) {
+	                dotContainer.childNodes[_i].classList.remove('active');
 	            }
-	            dot_container.childNodes[e.detail.currentSlide].classList.add('active');
+	            dotContainer.childNodes[e.detail.currentSlide].classList.add('active');
 	        }
 	        if (e.type === 'on.swiper.resize') {
-	            for (var _i2 = 0, _len2 = dot_container.childNodes.length; _i2 < _len2; _i2++) {
-	                dot_container.childNodes[_i2].classList.remove('active');
+	            for (var _i2 = 0, _len2 = dotContainer.childNodes.length; _i2 < _len2; _i2++) {
+	                dotContainer.childNodes[_i2].classList.remove('active');
 	            }
-	            dot_container.childNodes[0].classList.add('active');
+	            dotContainer.childNodes[0].classList.add('active');
 	        }
 	    };
 	

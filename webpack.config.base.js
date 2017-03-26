@@ -16,7 +16,7 @@ export const PORT = 8080;
 
 export default {
     entry: {
-        "swiper": ["./src/swiper.js"]
+        swiper: ['./src/swiper.js']
     },
     module: {
         loaders: [
