@@ -1,6 +1,6 @@
 
 ## Swiper
-[![license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/AmitM30/basic-swiper/master/LICENSE)
+[![license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/AmitM30/basic-swiper/master/LICENSE) [![Code Climate](https://codeclimate.com/github/AmitM30/basic-swiper/badges/gpa.svg)](https://codeclimate.com/github/AmitM30/basic-swiper)
 
 Touch enabled minimalistic slider written in vanilla JavaScript.
 

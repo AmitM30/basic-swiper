@@ -1,0 +1,26 @@
+---
+engines:
+  csslint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+    checks:
+      no-multi-spaces:
+        enabled: false
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "**.css"
+  - "**.inc"
+  - "**.js"
+  - "**.module"
+exclude_paths:
+- dist/
+- test/
+- node_modules/

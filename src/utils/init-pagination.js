@@ -7,35 +7,35 @@
  * @param  {element} options     slider options
  */
 export default function initPagination (slider, slideTo, options) {
-    let dot_count         = slider.querySelectorAll('.' + options.classNameSlide).length;
-    let dot_container     = slider.querySelector('.' + options.classNameDotsContainer);
-    let dot_list_item     = document.createElement('li');
-    dot_list_item.className = 'swiper-pagination-bullet';
+    let dotCount         = slider.querySelectorAll('.' + options.classNameSlide).length;
+    let dotContainer     = slider.querySelector('.' + options.classNameDotsContainer);
+    let dotListItem     = document.createElement('li');
+    dotListItem.className = 'swiper-pagination-bullet';
 
     function handleDotEvent (e) {
         if (e.type === 'before.swiper.init') { }
         if (e.type === 'after.swiper.init') {
-            for (let i = 0, len = dot_count; i < len; i++) {
-                let clone = dot_list_item.cloneNode();
-                dot_container.appendChild(clone);
+            for (let i = 0, len = dotCount; i < len; i++) {
+                let clone = dotListItem.cloneNode();
+                dotContainer.appendChild(clone);
 
-                dot_container.childNodes[i].addEventListener('click', function(e) {
-                    slideTo(Array.prototype.indexOf.call(dot_container.childNodes, e.target));
+                dotContainer.childNodes[i].addEventListener('click', function(e) {
+                    slideTo(Array.prototype.indexOf.call(dotContainer.childNodes, e.target));
                 });
             }
-            dot_container.childNodes[0].classList.add('active');
+            dotContainer.childNodes[0].classList.add('active');
         }
         if (e.type === 'after.swiper.slide') {
-            for (let i = 0, len = dot_container.childNodes.length; i < len; i++) {
-                dot_container.childNodes[i].classList.remove('active');
+            for (let i = 0, len = dotContainer.childNodes.length; i < len; i++) {
+                dotContainer.childNodes[i].classList.remove('active');
             }
-            dot_container.childNodes[e.detail.currentSlide].classList.add('active');
+            dotContainer.childNodes[e.detail.currentSlide].classList.add('active');
         }
         if (e.type === 'on.swiper.resize') {
-            for (let i = 0, len = dot_container.childNodes.length; i < len; i++) {
-                dot_container.childNodes[i].classList.remove('active');
+            for (let i = 0, len = dotContainer.childNodes.length; i < len; i++) {
+                dotContainer.childNodes[i].classList.remove('active');
             }
-            dot_container.childNodes[0].classList.add('active');
+            dotContainer.childNodes[0].classList.add('active');
         }
     };
 
