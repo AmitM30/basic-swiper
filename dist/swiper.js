@@ -133,7 +133,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 	
-	        slides[currentIndex].classList.add(classNameActiveSlide);
+	        if (slides[currentIndex]) {
+	            slides[currentIndex].classList.add(classNameActiveSlide);
+	        }
 	
 	        if (prevCtrl) {
 	            currentIndex === 0 ? prevCtrl.classList.add(options.classNameDisabled) : prevCtrl.classList.remove(options.classNameDisabled);
