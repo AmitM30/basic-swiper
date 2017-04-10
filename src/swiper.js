@@ -64,34 +64,58 @@ let swiper = function (slider, opts) {
 
     /**
      * private
-     * setupInfinite: function to setup if infinite is set
+     * setupSlidesPerView: function to setup no. of slides per view
      *
      * @param  {array} slideArray
      * @return {array} array of updated slideContainer elements
      */
-    function setupInfinite (slideArray) {
-        const {infinite} = options;
+    function setupSlidesPerView (slideArray) {
+        const {
+            slidesPerView,
+            classNameSlide
+        } = options;
 
-        const front = slideArray.slice(0, infinite);
-        const back  = slideArray.slice(slideArray.length - infinite, slideArray.length);
-
-        front.forEach(function (element) {
-            const cloned = element.cloneNode(true);
-
-            slideContainer.appendChild(cloned);
+        slideArray.forEach(function (element) {
+            element.style.width = (100 / slidesPerView) + '%';
         });
-
-        back.reverse()
-            .forEach(function (element) {
-                const cloned = element.cloneNode(true);
-
-                slideContainer.insertBefore(cloned, slideContainer.firstChild);
-            });
 
         slideContainer.addEventListener(prefixes.transitionEnd, onTransitionEnd);
 
         return slice.call(slideContainer.children);
     }
+
+    // /**
+    //  * private
+    //  * setupInfinite: function to setup if infinite is set
+    //  *
+    //  * @param  {array} slideArray
+    //  * @return {array} array of updated slideContainer elements
+    //  */
+    // function setupInfinite (slideArray) {
+    //     const { infinite } = options;
+    //     console.log('setupInfinite: ', slideArray);
+    //     console.log('infinite: ', infinite);
+
+    //     const front = slideArray.slice(0, infinite);
+    //     const back  = slideArray.slice(slideArray.length - infinite, slideArray.length);
+
+    //     front.forEach(function (element) {
+    //         const cloned = element.cloneNode(true);
+
+    //         slideContainer.appendChild(cloned);
+    //     });
+
+    //     back.reverse()
+    //         .forEach(function (element) {
+    //             const cloned = element.cloneNode(true);
+
+    //             slideContainer.insertBefore(cloned, slideContainer.firstChild);
+    //         });
+
+    //     slideContainer.addEventListener(prefixes.transitionEnd, onTransitionEnd);
+
+    //     return slice.call(slideContainer.children);
+    // }
 
     /**
      * [dispatchSliderEvent description]
@@ -270,11 +294,17 @@ let swiper = function (slider, opts) {
             y: slideContainer.offsetTop
         };
 
-        if (options.infinite) {
-            slides = setupInfinite(slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide)));
+        if (options.slidesPerView) {
+            slides = setupSlidesPerView(slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide)));
         } else {
             slides = slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide));
         }
+
+        // if (options.infinite) {
+        //     slides = setupInfinite(slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide)));
+        // } else {
+        //     slides = slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide));
+        // }
 
         reset();
 

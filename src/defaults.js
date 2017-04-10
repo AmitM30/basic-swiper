@@ -6,6 +6,12 @@ export default {
     slidesToScroll: 1,
 
     /**
+     * no. of slides per view
+     * @slidesPerView {Number}
+     */
+    slidesPerView: 1,
+
+    /**
      * time in milliseconds for the animation of a valid slide attempt
      * @slideSpeed {Number}
      */

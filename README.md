@@ -143,8 +143,8 @@ li img {
         <td>default: 1</td>
     </tr>
     <tr>
-        <td>infinite</td>
-        <td>default: false (number of visible slides)</td>
+        <td>slidesPerView</td>
+        <td>default: 1 (number of visible slides)</td>
     </tr>
     <tr>
         <td>enableMouseEvents</td>
