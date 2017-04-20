@@ -8,7 +8,10 @@ import defaults             from './defaults.js';
 const slice = Array.prototype.slice;
 
 // 'use strict';
-let swiper = function (slider, opts) {
+(function (window) {
+  let swiper = function (slider, opts) {
+    let self = this;
+
     let position;
     let slidesWidth;
     let frameWidth;
@@ -27,7 +30,8 @@ let swiper = function (slider, opts) {
 
     let index   = 0;
     let options = {};
-    let onAutoplayStart;
+
+    self.onAutoplayStart;
 
     /**
      * if object is jQuery convert to native DOM element
@@ -435,8 +439,8 @@ let swiper = function (slider, opts) {
             nextCtrl.removeEventListener('click', next);
         }
 
-        if (onAutoplayStart) {
-            window.clearInterval(onAutoplayStart);
+        if (self.onAutoplayStart) {
+            window.clearInterval(self.onAutoplayStart);
         }
 
         // remove cloned slides if infinite is set
@@ -599,13 +603,15 @@ let swiper = function (slider, opts) {
     function startAutoplay () {
         // set autoplay
         if (options.autoplay) {
-            onAutoplayStart = initAutoplay(slide, options);
+            stopAutoplay();
+            self.onAutoplayStart = initAutoplay(slide, options);
         }
     }
 
     function stopAutoplay () {
-        if (onAutoplayStart) {
-            window.clearInterval(onAutoplayStart);
+        if (self.onAutoplayStart) {
+            window.clearInterval(self.onAutoplayStart);
+            self.onAutoplayStart = null;
         }
     }
 
@@ -622,6 +628,8 @@ let swiper = function (slider, opts) {
         next,
         destroy
     };
-};
+  };
 
-window.swiper = swiper;
+  window.swiper = swiper;
+
+})(window);
