@@ -334,6 +334,11 @@ const slice = Array.prototype.slice;
 
         options.window.addEventListener('resize', onResize);
 
+        // check if swiper instance is not present, destroy
+        slider.addEventListener('before.swiper.slide', function () {
+            if (!document.body.contains(slider)) { destroy(); }
+        });
+
         dispatchSliderEvent('after', 'init');
     }
 

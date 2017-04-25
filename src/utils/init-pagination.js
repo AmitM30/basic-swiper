@@ -10,7 +10,6 @@ export default function initPagination (slider, slideTo, options) {
     let dotCount         = slider.querySelectorAll('.' + options.classNameSlide).length;
     let dotContainer     = slider.querySelector('.' + options.classNameDotsContainer);
     let dotListItem      = document.createElement('li');
-    dotListItem.className = 'swiper-pagination-bullet';
 
     function handleDotEvent (e) {
         if (e.type === 'before.swiper.init') { }

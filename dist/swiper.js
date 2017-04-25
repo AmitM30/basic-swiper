@@ -374,7 +374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            // set pagination
 	            if (dotsContainer) {
-	                (0, _initPagination2.default)(slider, slideTo, options, startAutoplay, stopAutoplay);
+	                (0, _initPagination2.default)(slider, slideTo, options);
 	            }
 	
 	            position = {
@@ -417,6 +417,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            options.window.addEventListener('resize', onResize);
+	
+	            // check if swiper instance is not present, destroy
+	            slider.addEventListener('before.swiper.slide', function () {
+	                if (!document.body.contains(slider)) {
+	                    destroy();
+	                }
+	            });
 	
 	            dispatchSliderEvent('after', 'init');
 	        }
@@ -697,7 +704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // set autoplay
 	            if (options.autoplay) {
 	                stopAutoplay();
-	                self.onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
+	                self.onAutoplayStart = (0, _initAutoplay2.default)(slide, options, slider);
 	            }
 	        }
 	
@@ -895,7 +902,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var dotCount = slider.querySelectorAll('.' + options.classNameSlide).length;
 	    var dotContainer = slider.querySelector('.' + options.classNameDotsContainer);
 	    var dotListItem = document.createElement('li');
-	    dotListItem.className = 'swiper-pagination-bullet';
 	
 	    function handleDotEvent(e) {
 	        if (e.type === 'before.swiper.init') {}
