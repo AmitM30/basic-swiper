@@ -704,7 +704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // set autoplay
 	            if (options.autoplay) {
 	                stopAutoplay();
-	                self.onAutoplayStart = (0, _initAutoplay2.default)(slide, options, slider);
+	                self.onAutoplayStart = (0, _initAutoplay2.default)(slide, options);
 	            }
 	        }
 	
@@ -902,6 +902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var dotCount = slider.querySelectorAll('.' + options.classNameSlide).length;
 	    var dotContainer = slider.querySelector('.' + options.classNameDotsContainer);
 	    var dotListItem = document.createElement('li');
+	    dotListItem.className = 'swiper-pagination-bullet';
 	
 	    function handleDotEvent(e) {
 	        if (e.type === 'before.swiper.init') {}
