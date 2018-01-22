@@ -8,6 +8,7 @@ Forked from: [http://meandmax.github.io/lory/](http://meandmax.github.io/lory/ "
 - Autoplay
 - RTL
 - Lazyload images support
+- Stop sliding on hover
 
 ### Installation
 
@@ -205,6 +206,10 @@ li img {
     <tr>
         <td>direction</td>
         <td>default: 'ltr'</td>
+    </tr>
+    <tr>
+        <td>loadPrevNextImage</td>
+        <td>default: true</td>
     </tr>
 </table>
 

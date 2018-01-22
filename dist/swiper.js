@@ -388,6 +388,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                slides = slice.call(slideContainer.getElementsByClassName(_defaults2.default.classNameSlide));
 	            }
 	
+	            slides.forEach(function (slide) {
+	                slide.addEventListener('mouseenter', function () {
+	                    stopAutoplay();
+	                });
+	                slide.addEventListener('mouseleave', function () {
+	                    startAutoplay();
+	                });
+	            });
+	
 	            // if (options.infinite) {
 	            //     slides = setupInfinite(slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide)));
 	            // } else {
