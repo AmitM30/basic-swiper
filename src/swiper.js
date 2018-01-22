@@ -304,6 +304,11 @@ const slice = Array.prototype.slice;
             slides = slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide));
         }
 
+        slides.forEach(function (slide) {
+            slide.addEventListener('mouseenter', function () { stopAutoplay(); });
+            slide.addEventListener('mouseleave', function () { startAutoplay(); });
+        });
+
         // if (options.infinite) {
         //     slides = setupInfinite(slice.call(slideContainer.getElementsByClassName(defaults.classNameSlide)));
         // } else {
