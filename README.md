@@ -207,10 +207,6 @@ li img {
         <td>direction</td>
         <td>default: 'ltr'</td>
     </tr>
-    <tr>
-        <td>loadPrevNextImage</td>
-        <td>default: true</td>
-    </tr>
 </table>
 
 ## Events
