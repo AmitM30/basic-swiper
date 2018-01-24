@@ -488,7 +488,7 @@ const slice = Array.prototype.slice;
             frame.addEventListener('mouseleave', onTouchend);
         }
 
-        frame.addEventListener('touchmove', onTouchmove, { passive: true });
+        frame.addEventListener('touchmove', onTouchmove);
         frame.addEventListener('touchend', onTouchend);
 
         const {pageX, pageY} = touches;
