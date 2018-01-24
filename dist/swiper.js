@@ -586,7 +586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                frame.addEventListener('mouseleave', onTouchend);
 	            }
 	
-	            frame.addEventListener('touchmove', onTouchmove, { passive: true });
+	            frame.addEventListener('touchmove', onTouchmove);
 	            frame.addEventListener('touchend', onTouchend);
 	
 	            var pageX = touches.pageX,
