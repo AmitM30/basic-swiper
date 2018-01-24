@@ -418,7 +418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                nextCtrl.addEventListener('click', next);
 	            }
 	
-	            frame.addEventListener('touchstart', onTouchstart);
+	            frame.addEventListener('touchstart', onTouchstart, { passive: true });
 	
 	            if (enableMouseEvents) {
 	                frame.addEventListener('mousedown', onTouchstart);
@@ -586,7 +586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                frame.addEventListener('mouseleave', onTouchend);
 	            }
 	
-	            frame.addEventListener('touchmove', onTouchmove);
+	            frame.addEventListener('touchmove', onTouchmove, { passive: true });
 	            frame.addEventListener('touchend', onTouchend);
 	
 	            var pageX = touches.pageX,
