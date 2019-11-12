@@ -13,7 +13,7 @@ Forked from: [http://meandmax.github.io/lory/](http://meandmax.github.io/lory/ "
 ### Installation
 
 ```
-bower install basic-swiper --save
+npm install basic-swiper --save
 ```
 
 ### Using:
@@ -265,6 +265,3 @@ li img {
 * FireFox
 * Opera
 * Internet Explorer 10+
-* Internet Explorer 9
-    - graceful, no transitions
-    - need to polyfill classlist (https://github.com/eligrey/classList.js/)
