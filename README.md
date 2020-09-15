@@ -4,16 +4,15 @@
 
 Touch enabled minimalistic slider written in vanilla JavaScript.
 
-Forked from: [http://meandmax.github.io/lory/](http://meandmax.github.io/lory/ "lory"), Updated for [Wadi](https://en-sa.wadi.com) with:
 - Autoplay
-- RTL
+- RTL support
 - Lazyload images support
 - Stop sliding on hover
 
 ### Installation
 
 ```
-bower install basic-swiper --save
+npm install basic-swiper --save
 ```
 
 ### Using:
@@ -265,6 +264,3 @@ li img {
 * FireFox
 * Opera
 * Internet Explorer 10+
-* Internet Explorer 9
-    - graceful, no transitions
-    - need to polyfill classlist (https://github.com/eligrey/classList.js/)
